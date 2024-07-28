@@ -45,10 +45,14 @@ h1 {
     width: 210px;
     position: fixed;
     top: 0;
-    left: 0;
+    left: -250px;
     background-color:  #7EA35F;
+    transition: 0.3s;
     padding-left: 5px;
 }
+
+
+
 .sidebar a {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -64,12 +68,54 @@ h1 {
     background-color: #E1E8C2;
     display: block;
     text-decoration: none;
+    transition: 0.3s;
 }
 
-.sidebar a:hover {
-    background-color: #B9BF9E;
-    color: darkgreen;
+
+
+/*.sidebar a:hover {*/
+/*    background-color: #B9BF9E;*/
+/*    color: darkgreen;*/
+/*}*/
+
+/* styles.css */
+
+
+
+#toggleSidebarBtn {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
 }
+
+
+
+.sidebar .logo {
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar.open {
+    left: 0; /* Show the sidebar */
+}
+
+#closeSidebarBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
 
 .contentContainer {
     border: 45px solid #7EA35F;
@@ -101,6 +147,11 @@ h1 {
     font-size: 15px;
     margin-left: 200px;
 }
+
+
+
+
+
 
 
 /*button {*/
