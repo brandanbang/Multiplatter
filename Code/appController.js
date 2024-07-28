@@ -15,6 +15,30 @@ router.get('/check-db-connection', async (req, res) => {
     }
 });
 
+router.get('/recipestable', async (req, res) => {
+    const tableContent = await appService.fetchRecipesWithAvgRating();
+    res.json({data:tableContent});
+});
+router.get('/recipestable1', async (req, res) => {
+    const tableContent = await appService.fetchRecipesFromDb();
+    res.json({data:tableContent});
+});
+
+router.get('/ratingstable', async (req, res) => {
+    const tableContent = await appService.fetchRatingsFromDb();
+    res.json({data:tableContent});
+});
+
+
+router.post("/initiate-all-tables", async (req, res) => {
+    const initiateResult = await appService.initiateAlltables();
+    if (initiateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
 router.get('/demotable', async (req, res) => {
     const tableContent = await appService.fetchDemotableFromDb();
     res.json({data: tableContent});
