@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <!-- This meta tag ensures that the website renders correctly across different device sizes, enhancing mobile responsiveness. -->
@@ -11,16 +11,6 @@
     <title>Multiplatter </title>
 </head>
 <body>
-<!-- ===================================================================================== -->
-<!-- Display the current status of the database connection.
-     !!HERE TO HELP U DEBUGGING, NOT REQUIRED IN YOUR OWN PROJECT!!
-     -->
-<!--    <h6>Database Connection Status:-->
-<!--        &lt;!&ndash; An in-line placeholder to display connection status. &ndash;&gt;-->
-<!--        <span id="dbStatus"> </span>-->
-<!--        &lt;!&ndash; A loading GIF, will be hided once get the status. &ndash;&gt;-->
-<!--        <img id="loadingGif" class="loading-gif" src="loading_100px.gif" alt="Loading...">-->
-<!--    </h6>-->
 
 <!--   SIDEBAR-->
 <button id="toggleSidebarBtn">☰</button>
@@ -43,19 +33,62 @@
 
 <h1><u>HOME</u></h1>
 
-<div class="contentContainer">
-    <p>Our primary purpose is to let people access one place where they can find everything they would need to cook
-        their favorite dishes or even try to make new dishes. You can access recipes, the ingredients needed,
-        substitutes, best places you can buy items required in the recipe as well as reviews about the recipe
-        including other people’s experiences with it!</p>
-    <p> You can look for recipes based on the ingredients you have, cuisine preferences and dietary and
-        time restrictions. You can also use this site to look for the best nearby place to buy missing items.
-        Finally, you can also rate and view other people’s reviews of a particular recipe.</p>
-</div>
+<section class="slideshow" id="HomeSlideshow">
+    <div class="slideHeader">POPULAR RECIPES</div>
+    <!--    <button class="slideButtonL">&#10096</button>-->
+    <!--    <button class="slideButtonR">&#10097</button>-->
+    <div class="slides" >
+        <div class="slide">
+            <div class="slideRecipe">
+                <img src="images/img_curry.jpg">
+                <div class="slideCaption"> Spicy Chicken Curry</div>
+            </div>
+        </div>
+        <div class="slide">
+            <div class="slideRecipe"> <img src="images/img_cake.jpg">
+                <div class="slideCaption"> Classic Chocolate Cake </div></div>
+        </div>
+        <div class="slide">
+            <div class="slideRecipe">  <img src="images/img_lemon.jpg">
+                <div class="slideCaption"> Lemon Drizzle Cake </div></div>
+        </div>
+        <div class="slide">
+            <div class="slideRecipe"><img src="images/img_pasta.jpg">
+                <div class="slideCaption"> Spaghetti Bolognese </div></div>
+        </div>
+        <div class="slide">
+            <div class="slideRecipe"><img src="images/img_taco.jpg">
+                <div class="slideCaption"> Vegan Tacos </div></div>
+        </div>
+        <div class="slide">
+            <div class="slideRecipe"> <img src="images/img_toast.jpg">
+                <div class="slideCaption"> Avocado Toast </div></div>
+        </div>
+    </div>
+</section>
+<br>
+<br>
+<br>
 
-<footer class="Footer">
-    <div class="footerText"> Contact Info:</div>
-</footer>
+<section class="searchbar">
+    <input type="text" id="searchbartext" placeholder="Search recipes...">
+    <select class="filter"> Filter
+        <option value="All">All</option>
+        <option value="Meal Type">Meal Type</option>
+        <option value="Cuisine">Cuisine</option>
+        <option value="Duration">Duration</option>
+        <option value="Rating">Rating</option>
+    </select>
+    <button id="searchButton"> GO</button>
+    <div id="results"></div>
+</section>
+
+<section>
+    <footer class="Footer">
+        <div class="footerText"> Contact Info:</div>
+    </footer>
+</section>
+
 
 <!-- ===================================================================================== -->
 <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
