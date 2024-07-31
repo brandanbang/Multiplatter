@@ -182,6 +182,18 @@ CREATE TABLE ClassifiesBy
     FOREIGN KEY (RecipeID) REFERENCES RecipeCreatesSortedBy(RecipeID) ON DELETE CASCADE,
     FOREIGN KEY (DescriptorName) REFERENCES Descriptors(DescriptorName) ON DELETE CASCADE
 );
+
+CREATE TABLE Saves (
+   RecipeID INTEGER,
+   Username VARCHAR(60),
+   FOREIGN KEY (RecipeID) REFERENCES RecipeCreatesSortedBy(RecipeID) ON DELETE CASCADE,
+   FOREIGN KEY (Username) REFERENCES UserDetails(Username) ON DELETE CASCADE
+);
+
+
+
+
+
 -- Inserting values into UserLocation
 INSERT INTO UserLocation (PhoneNo, ProvinceState, City) VALUES (1234567890, 'British Columbia', 'Vancouver');
 INSERT INTO UserLocation (PhoneNo, ProvinceState, City) VALUES (1345678901, 'Zinj', 'Manama');
@@ -325,4 +337,10 @@ INSERT INTO Substitutes (IngredientName, SubstituteName) VALUES ('Chicken', 'Tof
 INSERT INTO Substitutes (IngredientName, SubstituteName) VALUES ('Chicken Broth', 'Vegetable Broth');
 INSERT INTO Substitutes (IngredientName, SubstituteName) VALUES ('Lemon', 'Lime');
 INSERT INTO Substitutes (IngredientName, SubstituteName) VALUES ('Sour Cream', 'Greek Yogurt');
+INSERT INTO Saves(RecipeID, Username) VALUES (101, chef_janes);
+INSERT INTO Saves(RecipeID, Username) VALUES (103, chef_janes);
+INSERT INTO Saves(RecipeID, Username) VALUES (105, chef_janes);
+INSERT INTO Saves(RecipeID, Username) VALUES (103, greatestBossEver);
+INSERT INTO Saves(RecipeID, Username) VALUES (101, greatestBossEver);
+INSERT INTO Saves(RecipeID, Username) VALUES (104, bake_master);
 COMMIT;
