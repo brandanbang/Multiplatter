@@ -115,6 +115,40 @@ h1 {
     cursor: pointer;
 }
 
+#recipes-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.recipe-card {
+    border: 1px solid #98fb98;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+    background-color: #e0f7e0;
+    box-shadow: 0 4px 8px rgba(0, 128, 0, 0.2);
+    transition: transform 0.2s;
+}
+.recipe-card:hover {
+    transform: scale(1.05);
+}
+.recipe-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+.title {
+    font-size: 1.8em;
+    margin-top: 12px;
+    color: #006400;
+    font-weight: bold;
+}
+.rating {
+    margin-top: 8px;
+    color: #556b2f;
+    font-size: 1.2em;
+}
 
 .contentContainer {
     border: 45px solid #7EA35F;

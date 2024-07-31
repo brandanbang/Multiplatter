@@ -4,6 +4,9 @@ const loadEnvFile = require('./utils/envUtil');
 const envVariables = loadEnvFile('./.env');
 
 const fs = require('fs');
+const { Buffer } = require('buffer');
+
+
 
 // Database configuration setup. Ensure your .env file has the required database credentials.
 const dbConfig = {
@@ -117,10 +120,11 @@ async function fetchRecipesFromDb() {
 async function fetchRecipesWithAvgRating() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`
-            SELECT r.RecipeID, r.Title, r.Picture, r.RecipeDescription, AVG(r.Rating) as AvgRating
-            FROM RecipeCreatesSortedBy r
-            LEFT JOIN Rating rt ON r.RecipeID = rt.RecipeID
-            GROUP BY r.RecipeID, r.Title, r.Picture, r.RecipeDescription
+            SELECT r.RecipeID, r.Title, r.RecipeDescription, AVG(rt.Rating) as AvgRating
+            FROM RECIPECREATESSORTEDBY r
+            LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
+            LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
+            GROUP BY r.RecipeID, r.Title, r.RecipeDescription
         `);
         return result.rows;
     }).catch((err) => {
@@ -128,6 +132,7 @@ async function fetchRecipesWithAvgRating() {
         return [];
     });
 }
+
 
 
 async function fetchRatingsFromDb() {

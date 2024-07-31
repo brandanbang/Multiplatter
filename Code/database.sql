@@ -325,3 +325,4 @@ INSERT INTO Substitutes (IngredientName, SubstituteName) VALUES ('Chicken', 'Tof
 INSERT INTO Substitutes (IngredientName, SubstituteName) VALUES ('Chicken Broth', 'Vegetable Broth');
 INSERT INTO Substitutes (IngredientName, SubstituteName) VALUES ('Lemon', 'Lime');
 INSERT INTO Substitutes (IngredientName, SubstituteName) VALUES ('Sour Cream', 'Greek Yogurt');
+COMMIT;
