@@ -191,7 +191,8 @@ button {
     font-size: 25px;
 }
 .slides {
-    margin-right: 20px;
+    margin-right: 15px;
+    margin-left: 15px;
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
