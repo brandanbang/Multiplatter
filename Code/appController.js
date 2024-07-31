@@ -16,8 +16,16 @@ router.get('/check-db-connection', async (req, res) => {
 });
 
 router.get('/recipestable', async (req, res) => {
-    const tableContent = await appService.fetchRecipesWithAvgRating();
-    res.json({data:tableContent});
+    try{
+        console.log('Fetching recipes...');
+        const tableContent = await appService.fetchRecipesWithAvgRating();
+        console.log('Fetched recipes:', tableContent);
+        res.json({data:tableContent});
+    } catch (err) {
+        console.error('Error fetching recipes:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+
 });
 router.get('/recipestable1', async (req, res) => {
     const tableContent = await appService.fetchRecipesFromDb();

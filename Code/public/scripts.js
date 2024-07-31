@@ -12,18 +12,7 @@
  * 
  */
 
-document.getElementById('toggleSidebarBtn').addEventListener('click', function() {
 
-    var sidebar = document.getElementById('sidebar');
-    sidebar.classList.toggle('open');
-});
-
-//Closes sidebar
-document.getElementById('closeSidebarBtn').addEventListener('click', function() {
-    var sidebar = document.getElementById('sidebar');
-
-    sidebar.classList.remove('open');
-});
 
 // This function checks the database connection and updates its status on the frontend.
 async function checkDbConnection() {
