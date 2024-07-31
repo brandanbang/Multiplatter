@@ -116,6 +116,16 @@ async function fetchRecipesFromDb() {
         return [];
     });
 }
+async function checkLoginStatus() {
+    try {
+        const response = await fetch('/checkLoginStatus'); // Adjust the endpoint to your actual API
+        const data = await response.json();
+        return data.isLoggedIn;
+    } catch (error) {
+        console.error('Error checking login status:', error);
+        return false;
+    }
+}
 
 async function fetchRecipesWithAvgRating() {
     return await withOracleDB(async (connection) => {
@@ -202,6 +212,17 @@ async function countDemotable() {
     });
 }
 
+async function saveRecipe(recipeId, username) {
+    const connection = await oracleDB.getConnection();
+    await connection.execute(
+        'INSERT INTO Saves (RecipeID, Username) VALUES (:recipeId, :username)',
+        [recipeId, username],
+        { autoCommit: true }
+    );
+    await connection.close();
+}
+
+
 module.exports = {
     testOracleConnection,
     initiateAlltables,
@@ -212,5 +233,7 @@ module.exports = {
     insertDemotable,
     updateNameDemotable,
     countDemotable,
-    fetchRecipesWithAvgRating
+    fetchRecipesWithAvgRating,
+    checkLoginStatus,
+    saveRecipe
 };

@@ -52,7 +52,18 @@
 <!--        time restrictions. You can also use this site to look for the best nearby place to buy missing items.-->
 <!--        Finally, you can also rate and view other people’s reviews of a particular recipe.</p>-->
 <!--</div>-->
-<H2 align="right"> Search for your favourite recipes</H2>
+<section class="searchbar">
+    <input type="text" id="searchbartext" placeholder="Search recipes...">
+    <select class="filter"> Filter
+        <option value="All">All</option>
+        <option value="Meal Type">Meal Type</option>
+        <option value="Cuisine">Cuisine</option>
+        <option value="Duration">Duration</option>
+        <option value="Rating">Rating</option>
+    </select>
+    <button id="searchButton"> GO</button>
+    <div id="results"></div>
+</section>
 
 
 <div id="recipes-container"></div>

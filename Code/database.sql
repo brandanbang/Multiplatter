@@ -1,3 +1,4 @@
+DROP TABLE Saves;
 DROP TABLE ClassifiesBy;
 DROP TABLE Elaborates;
 DROP TABLE Uses;
@@ -337,10 +338,10 @@ INSERT INTO Substitutes (IngredientName, SubstituteName) VALUES ('Chicken', 'Tof
 INSERT INTO Substitutes (IngredientName, SubstituteName) VALUES ('Chicken Broth', 'Vegetable Broth');
 INSERT INTO Substitutes (IngredientName, SubstituteName) VALUES ('Lemon', 'Lime');
 INSERT INTO Substitutes (IngredientName, SubstituteName) VALUES ('Sour Cream', 'Greek Yogurt');
-INSERT INTO Saves(RecipeID, Username) VALUES (101, chef_janes);
-INSERT INTO Saves(RecipeID, Username) VALUES (103, chef_janes);
-INSERT INTO Saves(RecipeID, Username) VALUES (105, chef_janes);
-INSERT INTO Saves(RecipeID, Username) VALUES (103, greatestBossEver);
-INSERT INTO Saves(RecipeID, Username) VALUES (101, greatestBossEver);
-INSERT INTO Saves(RecipeID, Username) VALUES (104, bake_master);
+INSERT INTO Saves(RecipeID, Username) VALUES (101, 'chef_janes');
+INSERT INTO Saves(RecipeID, Username) VALUES (103, 'chef_janes');
+INSERT INTO Saves(RecipeID, Username) VALUES (105, 'chef_janes');
+INSERT INTO Saves(RecipeID, Username) VALUES (103, 'greatestBossEver');
+INSERT INTO Saves(RecipeID, Username) VALUES (101, 'greatestBossEver');
+INSERT INTO Saves(RecipeID, Username) VALUES (104, 'bake_master');
 COMMIT;
