@@ -116,6 +116,21 @@ async function fetchRecipesFromDb() {
         return [];
     });
 }
+
+async function fetchRecipesFromDbById(id) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT *
+            FROM RECIPECREATESSORTEDBY
+            WHERE RecipeID = :id`,
+            [id]
+        );
+        return result.rows[0];
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function checkLoginStatus() {
     try {
         const response = await fetch('/checkLoginStatus'); // Adjust the endpoint to your actual API
@@ -227,6 +242,7 @@ module.exports = {
     testOracleConnection,
     initiateAlltables,
     fetchRecipesFromDb,
+    fetchRecipesFromDbById,
     fetchRatingsFromDb,
     fetchDemotableFromDb,
     initiateDemotable,
