@@ -87,7 +87,8 @@ CREATE TABLE Substitutes
 
 CREATE TABLE UserDetails
 (
-    Username VARCHAR(60) NOT NULL PRIMARY KEY ,
+    Username VARCHAR(60) PRIMARY KEY ,
+    Password VARCHAR(15) NOT NULL,
     PhoneNo INTEGER,
     Email VARCHAR(320) NOT NULL UNIQUE,
     Name VARCHAR(40),
@@ -202,12 +203,12 @@ INSERT INTO UserLocation (PhoneNo, ProvinceState, City) VALUES (1456789012, 'Que
 INSERT INTO UserLocation (PhoneNo, ProvinceState, City) VALUES (1567890123, 'Calgary', 'Alberta');
 INSERT INTO UserLocation (PhoneNo, ProvinceState, City) VALUES (1678901234, 'Manitoba', 'Winnipeg');
 INSERT INTO UserLocation (PhoneNo, ProvinceState, City) VALUES (1678901284, 'Mumbai', 'Maharashtra');
-INSERT INTO UserDetails (Username, PhoneNo, Email, Name) VALUES ('chef_janes', 1234567890, 'jane.stevens@gmail.com', 'Jane Stevens');
-INSERT INTO UserDetails (Username, PhoneNo, Email, Name) VALUES ('greatestBossEver', 1345678901, 'micheal.scott@yahoo.com', 'Michael Scott');
-INSERT INTO UserDetails (Username, PhoneNo, Email, Name) VALUES ('culinary_queen248', 1456789012, 'alice.cooper_12@gmail.com', 'Alice Cooper');
-INSERT INTO UserDetails (Username, PhoneNo, Email, Name) VALUES ('bake_master', 1567890123, 'james.brown@gmail.com', 'James Brown');
-INSERT INTO UserDetails (Username, PhoneNo, Email, Name) VALUES ('spicylover', 1678901234, 'gordon.ramsey@yahoo.com', 'Gordon Ramsey');
-INSERT INTO UserDetails (Username, PhoneNo, Email, Name) VALUES ('best_cook_2', 1678901284, 'srk_02@gmail.com', 'Shah Rukh Khan');
+INSERT INTO UserDetails (Username,Password, PhoneNo, Email, Name) VALUES ('chef_janes','pass*7600', 1234567890, 'jane.stevens@gmail.com', 'Jane Stevens');
+INSERT INTO UserDetails (Username,Password, PhoneNo, Email, Name) VALUES ('greatestBossEver','Jisny56', 1345678901, 'micheal.scott@yahoo.com', 'Michael Scott');
+INSERT INTO UserDetails (Username,Password, PhoneNo, Email, Name) VALUES ('culinary_queen248','J8gBkF5', 1456789012, 'alice.cooper_12@gmail.com', 'Alice Cooper');
+INSERT INTO UserDetails (Username,Password, PhoneNo, Email, Name) VALUES ('bake_master','pass7856', 1567890123, 'james.brown@gmail.com', 'James Brown');
+INSERT INTO UserDetails (Username,Password, PhoneNo, Email, Name) VALUES ('spicylover','099gsbu7', 1678901234, 'gordon.ramsey@yahoo.com', 'Gordon Ramsey');
+INSERT INTO UserDetails (Username,Password, PhoneNo, Email, Name) VALUES ('best_cook_2','jiPiu7ak', 1678901284, 'srk_02@gmail.com', 'Shah Rukh Khan');
 INSERT INTO Descriptors (DescriptorName, DescriptorDescription) VALUES ('pescatarian', 'a person who eats fish but no other meat');
 INSERT INTO Descriptors (DescriptorName, DescriptorDescription) VALUES ('lunch', 'a meal typically eaten at the middle of the day');
 INSERT INTO Descriptors (DescriptorName, DescriptorDescription) VALUES ('French Recipe', 'A recipe that belongs to the French cuisine');

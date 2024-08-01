@@ -84,13 +84,13 @@ router.post("/update-name-demotable", async (req, res) => {
 router.get('/count-demotable', async (req, res) => {
     const tableCount = await appService.countDemotable();
     if (tableCount >= 0) {
-        res.json({ 
-            success: true,  
+        res.json({
+            success: true,
             count: tableCount
         });
     } else {
-        res.status(500).json({ 
-            success: false, 
+        res.status(500).json({
+            success: false,
             count: tableCount
         });
     }
@@ -118,6 +118,18 @@ router.post('/saveRecipe', async (req, res) => {
     }
 });
 
-
+router.post("/logintable", async (req, res) => {
+    console.log("in appcontroller");
+    const {Username,Password} = req.body;
+    const insertResult = await appService.loginUser(Username,Password);
+    console.log("in appcontroller again");
+    console.log(insertResult);
+    if (insertResult.success) {
+        res.json({ success: true });
+    } else {
+        // res.status(500).json({ success: false });
+        res.json({success: false});
+    }
+});
 
 module.exports = router;

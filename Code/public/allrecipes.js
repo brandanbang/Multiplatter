@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     saveRecipe(id);
                 } else {
                     alert('Please log in to save recipes');
-                    window.location.href = '/login.html'; // Adjust the path to your login page
+                    window.location.href = '/signIn.html'; // Adjust the path to your login page
                 }
             });
 
