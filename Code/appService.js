@@ -256,6 +256,56 @@ async function loginUser(username, password) {
     });
 }
 
+async function signupUser(city,provinceState,username, password,phoneNo,email,name) {
+    return await withOracleDB(async (connection) => {
+        const userstate = await connection.execute  (`
+         SELECT u.Username FROM UserDetails u
+         where u.Username = :username`,
+            [username]);
+
+        if (userstate.rows.length > 0) {
+            console.log('user already exists , appservice');
+            return false;
+        }
+
+        const emailstate = await connection.execute  (`
+         SELECT u.Username FROM UserDetails u
+         where u.Email = :email`,
+            [email]);
+        if (emailstate.rows.length > 0) {
+            console.log('email already in use , appservice');
+            return false;
+        }
+
+        const phonestate = await connection.execute  (`
+         SELECT u.Username FROM UserDetails u
+         where u.PhoneNo = :phoneNo`,
+            [phoneNo]);
+        if (phonestate.rows.length > 0) {
+            return false;
+        }
+
+        const result1 = await connection.execute(
+            `INSERT INTO UserLocation (PhoneNo, ProvinceState, City) 
+            VALUES (:phoneNo, :provinceState, :city) `,
+            [phoneNo,provinceState,city],{autocommit: true});
+
+
+        const result2 = await connection.execute(
+            `INSERT INTO USERDETAILS (Username,Password, PhoneNo, Email, Name) 
+            VALUES (:username,:password,:phoneNo, :email,:name) `,
+                [username,password,phoneNo,email,name],
+                {autoCommit: true}
+
+            );
+            return result1.rowsAffected > 0 && result2.rowsAffected > 0;
+
+    }).catch(() => {
+        return false;
+    });
+}
+
+
 module.exports = {
     testOracleConnection,
     initiateAlltables,
@@ -269,5 +319,6 @@ module.exports = {
     fetchRecipesWithAvgRating,
     checkLoginStatus,
     saveRecipe,
-    loginUser
+    loginUser,
+    signupUser
 };

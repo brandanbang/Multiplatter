@@ -142,6 +142,21 @@ router.post("/logintable", async (req, res) => {
     }
 });
 
+router.post("/signup", async (req, res) => {
+    try {
+        const {City,ProvinceState,Username, Password, PhoneNo, Email, Name} = req.body;
+        const signUpResult = await appService.signupUser(City,ProvinceState,Username, Password, PhoneNo, Email, Name);
+        if (signUpResult) {
+            res.json({success: true});
+
+        } else {
+            res.json({success: false});
+        }
+
+    } catch (err) {
+        res.status(500).json({error: 'Internal Server Errors'});
+    }
+});
 
 
 
