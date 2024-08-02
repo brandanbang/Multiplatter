@@ -4,9 +4,6 @@ const loadEnvFile = require('./utils/envUtil');
 const envVariables = loadEnvFile('./.env');
 
 const fs = require('fs');
-//const { Buffer } = require('buffer');
-
-
 
 // Database configuration setup. Ensure your .env file has the required database credentials.
 const dbConfig = {

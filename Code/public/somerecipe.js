@@ -1,5 +1,3 @@
-console.log('somerecipe.js is running');
-
 document.addEventListener('DOMContentLoaded', async () => {
     const urlId = window.location.pathname.split('/').pop();
 
@@ -13,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log(urlId);
 
     try {
-        const response = await fetch(`/recipe/${urlId}`)
+        const response = await fetch(`/api/recipe/${urlId}`)
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -25,12 +23,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             console.log(recipe);
 
-            title.textContent = rTitle;
+            title.textContent = rTitle || 'not found';
             // img. place holder for img
-            description.textContent = rDescription;
-            id.textContent = rID;
-            creator.textContent = rCreator;
-            tag.textContent = rTag;
+            description.textContent = rDescription || 'not found';
+            id.textContent = rID || 'not found';
+            creator.textContent = rCreator || 'not found';
+            tag.textContent = rTag || 'not found';
 
         }
     } catch (error) {

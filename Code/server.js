@@ -25,6 +25,10 @@ app.use(express.json());             // Parse incoming JSON payloads
 // mount the router
 app.use('/', appController);
 
+app.get('/recipe/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'somerecipe.html'));
+});
+
 // ----------------------------------------------------------
 // Starting the server
 app.listen(PORT, () => {

@@ -118,14 +118,13 @@ router.post('/saveRecipe', async (req, res) => {
     }
 });
 
-router.get('/recipe/:id(\\d+)', async (req, res) => {
+router.get('/api/recipe/:id(\\d+)', async (req, res) => {
     try {
         const id = parseInt(req.params.id);
         const data = await appService.fetchRecipesFromDbById(id);
 
         if (data) {
             res.json(data);
-            // res.sendFile(path.join(__dirname, '/public/somerecipe.html'))
         } else {
             res.status(404).json({error: 'Data not found'});
         }
