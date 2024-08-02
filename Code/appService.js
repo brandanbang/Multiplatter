@@ -222,26 +222,39 @@ async function saveRecipe(recipeId, username) {
     await connection.close();
 }
 
-async function loginUser(username,password){
-        return await withOracleDB(async (connection) => {
-            const result = await connection.execute(`
-            SELECT u.Username,u.Password
+// async function loginUser(username,password){
+//         return await withOracleDB(async (connection) => {
+//             const result = await connection.execute(`
+//             SELECT u.Username,u.Password
+//             FROM UserDetails u
+//             WHERE u.Username = :username AND u.Password = :password;
+//         `,[username,password]);
+//             if (result.rows.length >0) {
+//              console.log('Login Successful!');
+//                 return result.rowsAffected && result.rowsAffected > 0;
+//             } else {
+//             console.log('Username does not exist');
+//                 return result.rowsAffected && result.rowsAffected > 0;
+//             }
+//             // return result.rows;
+//     }).catch(() => {
+//         return false;
+//     });
+// }
+
+async function loginUser(username, password) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT u.Username, u.Password
             FROM UserDetails u
-            WHERE u.Username = :username AND u.Password = :password;
-        `,[username,password]);
-            if (result.rows.length >0) {
-             console.log('Login Successful!');
-                return result.rowsAffected && result.rowsAffected > 0;
-            } else {
-            console.log('Username does not exist');
-                return result.rowsAffected && result.rowsAffected > 0;
-            }
-            // return result.rows;
+            WHERE u.Username = :username AND u.Password = :password
+        `, [username, password]);
+
+        return result.rows.length > 0;
     }).catch(() => {
         return false;
     });
 }
-
 
 module.exports = {
     testOracleConnection,
