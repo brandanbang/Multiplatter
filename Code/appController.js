@@ -98,7 +98,7 @@ router.get('/count-demotable', async (req, res) => {
 
 // Check login status route
 router.get('/checkLoginStatus', (req, res) => {
-    const isLoggedIn = req.session && req.session.user; // Adjust according to your session management
+    const isLoggedIn = req.session && req.session.user;
     res.json({ isLoggedIn });
 });
 
@@ -139,6 +139,17 @@ router.post("/logintable", async (req, res) => {
         res.json({ success: true });
     } else {
         res.json({ success: false });
+    }
+});
+
+router.get('/api/user/:username', async (req, res) => {
+    const username = req.params.username;
+    const userDetails = await appService.getUserDetails(username);
+
+    if (userDetails) {
+        res.json(userDetails);
+    } else {
+        res.status(404).send('User not found');
     }
 });
 

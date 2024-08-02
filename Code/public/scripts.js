@@ -193,6 +193,33 @@ async function countDemotable() {
 //     }
 // }
 
+// async function login(event) {
+//     event.preventDefault();
+//
+//     const usernameValue = document.getElementById('logInU').value;
+//     const passwordValue = document.getElementById('logInP').value;
+//
+//     const response = await fetch('/logintable', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//             Username: usernameValue,
+//             Password: passwordValue
+//         })
+//     });
+//
+//     const responseData = await response.json();
+//     const messageElement = document.getElementById('insertResultMsgU');
+//
+//     if (responseData.success) {
+//         messageElement.textContent = "Logged in successfully";
+//     } else {
+//         messageElement.textContent = "Either Username does not exist or password is wrong";
+//     }
+// }
+
 async function login(event) {
     event.preventDefault();
 
@@ -215,10 +242,12 @@ async function login(event) {
 
     if (responseData.success) {
         messageElement.textContent = "Logged in successfully";
+        window.location.href = `/profile.html?username=${usernameValue}`;
     } else {
         messageElement.textContent = "Either Username does not exist or password is wrong";
     }
 }
+
 
 function showLoginForm() {
     document.getElementById('loginform').style.display = 'block';

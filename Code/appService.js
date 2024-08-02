@@ -256,6 +256,47 @@ async function loginUser(username, password) {
     });
 }
 
+async function getUserDetails(username) {
+    let connection;
+
+    try {
+        connection = await oracledb.getConnection(dbConfig);
+
+        const result = await connection.execute(
+            `SELECT ud.Username, ud.Name, ud.Email, ud.PhoneNo, ul.City, ul.ProvinceState
+             FROM UserDetails ud
+             JOIN UserLocation ul ON ud.PhoneNo = ul.PhoneNo
+             WHERE ud.Username = :username`,
+            [username]
+        );
+
+        if (result.rows.length > 0) {
+            const row = result.rows[0];
+            return {
+                Username: row[0],
+                Name: row[1],
+                Email: row[2],
+                PhoneNo: row[3],
+                City: row[4],
+                ProvinceState: row[5]
+            };
+        } else {
+            return null;
+        }
+    } catch (err) {
+        console.error('Error in getUserDetails:', err);
+        return null;
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                console.error('Error closing connection in getUserDetails:', err);
+            }
+        }
+    }
+}
+
 async function signupUser(city,provinceState,username, password,phoneNo,email,name) {
     return await withOracleDB(async (connection) => {
         const userstate = await connection.execute  (`
@@ -320,5 +361,6 @@ module.exports = {
     checkLoginStatus,
     saveRecipe,
     loginUser,
-    signupUser
+    signupUser,
+    getUserDetails
 };

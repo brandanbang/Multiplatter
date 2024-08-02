@@ -286,6 +286,23 @@ footer {
     text-align: center;
 
 }
+#profileContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    margin: 100px auto;
+    padding: 20px;
+    border: 2px solid darkgreen;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#profileContainer p {
+    margin: 10px 0;
+}
 
 .searchbar {
     margin-left: 210px;
