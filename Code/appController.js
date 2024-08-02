@@ -97,24 +97,24 @@ router.get('/count-demotable', async (req, res) => {
 });
 
 // Check login status route
-router.get('/checkLoginStatus', (req, res) => {
-    const isLoggedIn = req.session && req.session.user;
-    res.json({ isLoggedIn });
-});
+// router.get('/checkLoginStatus', (req, res) => {
+//     const isLoggedIn = req.session && req.session.user;
+//     res.json({ isLoggedIn });
+// });
 
 // Save recipe route
 router.post('/saveRecipe', async (req, res) => {
-    if (!req.session || !req.session.user) {
-        return res.status(401).json({ error: 'Unauthorized' });
-    }
-    const { recipeId } = req.body;
-    const username = req.session.user.username;
-    try {
-        await saveRecipe(recipeId, username);
-        res.status(200).json({ message: 'Recipe saved successfully' });
-    } catch (error) {
-        console.error('Error saving recipe:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+    // const username = localStorage.getItem('username');
+    // if (!username) {
+    //     return res.status(401).json({ error: 'Unauthorized' });
+    // }
+    const { recipeId, username } = req.body;
+    //const username = req.session.user.username;
+    const savesResult = await appService.saveRecipe(recipeId, username);
+    if (savesResult) {
+        res.json({ success: true });
+    } else {
+        res.json({ success: false });
     }
 });
 

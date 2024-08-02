@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const recipeContainer = document.getElementById('recipes-container');
+    const username = localStorage.getItem('username');
+
 
     try {
         const response = await fetch('/recipestable');
@@ -35,13 +37,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             heartButton.classList.add('heart-button');
             heartButton.innerHTML = '❤';
             heartButton.addEventListener('click', async () => {
-                const isLoggedIn = await checkLoginStatus();
-                if (isLoggedIn) {
-                    saveRecipe(id);
-                } else {
+
+                //const isLoggedIn = await checkLoginStatus();
+                if (!username) {
                     alert('Please log in to save recipes');
-                    window.location.href = '/signIn.html'; // Adjust the path to your login page
+                    window.location.href = 'signIn.html';
+                    return;
+                } else {
+                    saveRecipe(id, username);
                 }
+
             });
 
             recipeCard.appendChild(img);
@@ -56,14 +61,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-async function saveRecipe(recipeId) {
+async function saveRecipe(recipeId, username) {
     try {
         const response = await fetch('/saveRecipe', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ recipeId }),
+            body: JSON.stringify({ recipeId, username }),
         });
         if (response.ok) {
             alert('Recipe saved successfully!');

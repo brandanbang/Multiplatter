@@ -213,13 +213,15 @@ async function countDemotable() {
 }
 
 async function saveRecipe(recipeId, username) {
-    const connection = await oracleDB.getConnection();
-    await connection.execute(
-        'INSERT INTO Saves (RecipeID, Username) VALUES (:recipeId, :username)',
-        [recipeId, username],
-        { autoCommit: true }
-    );
-    await connection.close();
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('INSERT INTO Saves (RecipeID, Username) VALUES (:recipeId, :username)',
+            [recipeId, username],
+            { autoCommit: true });
+
+    }).catch(() =>{
+        return false;
+    })
+
 }
 
 // async function loginUser(username,password){
