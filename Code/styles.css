@@ -18,7 +18,7 @@ body {
     position: fixed;
     top: 0;
     margin-left: 205px;
-
+    z-index: 1;
 }
 
 .headerText {

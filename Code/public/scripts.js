@@ -155,70 +155,20 @@ async function countDemotable() {
     }
 }
 
-// async function login(event) {
-//     event.preventDefault();
-//
-//     console.log('in log in in scripts.js');
-//     const usernameValue = document.getElementById('logInU').value;
-//     const passwordValue = document.getElementById('logInP').value;
-//
-//     console.log('will fetch in log in scripts.js');
-//
-//     const response = await fetch('/logintable', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({
-//             Username: usernameValue,
-//             Password: passwordValue
-//         })
-//     });
-//
-//     console.log('done fetching in log in scripts.js');
-//     console.log(response);
-//
-//     const responseData = await response.json();
-//
-//     console.log(responseData);
-//
-//     const messageElement = document.getElementById('insertResultMsgU');
-//
-//     if (responseData.success) {
-//         console.log('log in scripts.js');
-//         messageElement.textContent = "Logged in successfully";
-//     } else {
-//         console.log('Either Username does not exist or password is wrong in script');
-//         messageElement.textContent = "Either Username does not exist or password is wrong";
-//     }
-// }
 
-// async function login(event) {
-//     event.preventDefault();
-//
-//     const usernameValue = document.getElementById('logInU').value;
-//     const passwordValue = document.getElementById('logInP').value;
-//
-//     const response = await fetch('/logintable', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({
-//             Username: usernameValue,
-//             Password: passwordValue
-//         })
-//     });
-//
-//     const responseData = await response.json();
-//     const messageElement = document.getElementById('insertResultMsgU');
-//
-//     if (responseData.success) {
-//         messageElement.textContent = "Logged in successfully";
-//     } else {
-//         messageElement.textContent = "Either Username does not exist or password is wrong";
-//     }
-// }
+
+function showLoginForm() {
+    document.getElementById('loginform').style.display = 'block';
+    document.getElementById('signUpform').style.display = 'none';
+}
+
+function showSignUpForm() {
+    document.getElementById('loginform').style.display = 'none';
+    document.getElementById('signUpform').style.display = 'block';
+}
+
+
+
 
 async function login(event) {
     event.preventDefault();
@@ -242,29 +192,50 @@ async function login(event) {
 
     if (responseData.success) {
         messageElement.textContent = "Logged in successfully";
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('username', usernameValue);
         window.location.href = `/profile.html?username=${usernameValue}`;
     } else {
         messageElement.textContent = "Either Username does not exist or password is wrong";
     }
 }
 
-
-function showLoginForm() {
-    document.getElementById('loginform').style.display = 'block';
-    document.getElementById('signUpform').style.display = 'none';
+function logout() {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('username');
+    window.location.href = 'signIn.html';
 }
 
-function showSignUpForm() {
-    document.getElementById('loginform').style.display = 'none';
-    document.getElementById('signUpform').style.display = 'block';
-}
+document.addEventListener('DOMContentLoaded', function() {
+    const loginLink = document.getElementById('loginLink');
+    const profileLink = document.getElementById('profileLink');
+    const logoutLink = document.getElementById('logoutLink');
 
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
+    if (isLoggedIn) {
+        loginLink.style.display = 'none';
+        profileLink.style.display = 'block';
+        logoutLink.style.display = 'block';
+        const username = localStorage.getItem('username');
+        if (username) {
+            document.getElementById('username').textContent = username;
+        }
+    } else {
+        loginLink.style.display = 'block';
+        profileLink.style.display = 'none';
+        logoutLink.style.display = 'none';
+    }
+
+    logoutLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        logout();
+    });
+});
 
 window.onload = function() {
     checkDbConnection();
     document.getElementById("loginform").addEventListener("submit", login);
-    //document.getElementById("signUpform").addEventListener("submit", signUp);
 };
 
 // ---------------------------------------------------------------
