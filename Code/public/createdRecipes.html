@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Link to the external CSS stylesheet. Uncomment if you wish to customize or add styling. -->
-    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="styles.css">
 
     <title>Multiplatter </title>
 </head>
@@ -37,35 +37,20 @@
 </div>
 <script src="scripts.js"></script>
 <script src="sidebar.js"></script>
-
+<script src="/createdRecipes.js"></script>
 
 <header class="Header">
     <div class="headerText">Multiplatter</div>
 </header>
 
-<section id="profileContainer">
-<!--    <link rel="stylesheet" href="styles.css">-->
-    <h2 id="username"></h2>
-    <p><strong>Name:</strong> <span id="name"></span></p>
-    <p><strong>Email:</strong> <span id="email"></span></p>
-    <p><strong>City:</strong> <span id="city"></span></p>
-    <p><strong>Province/State:</strong> <span id="province"></span></p>
-    <p><strong>Phone Number:</strong> <span id="phoneNumber"></span></p>
-
-
-    <a id="savedRecipesLink" href="#" class="profilelink">My Saved Recipes</a>
-    <a id="createdRecipesLink" href="#" class="profilelink">My Created Recipes</a>
+<section class="createdRecipeContainer">
+    <h2 class="center">My Recipes</h2>
+    <div id="createdRecipesList"></div>
 </section>
-
-<script src="/profile.js"></script>
-
 
 <footer class="Footer">
     <div class="footerText"> Contact Info:</div>
 </footer>
 
-<!-- ===================================================================================== -->
-<!-- External JavaScript file that contains the functionality/logic for the operations above. -->
-<!--    <script src="scripts.js"></script>-->
 </body>
 </html>
