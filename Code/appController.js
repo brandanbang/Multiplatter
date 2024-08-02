@@ -180,6 +180,14 @@ router.get('/api/user/:username/saved-recipes', async (req, res) => {
 });
 
 
-
+router.get('/api/user/:username/created-recipes', async (req, res) => {
+    try {
+        const username = req.params.username;
+        const recipes = await appService.getCreatedRecipes(username);
+        res.json({ data: recipes });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch saved recipes' });
+    }
+});
 
 module.exports = router;

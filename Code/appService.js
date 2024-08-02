@@ -380,6 +380,36 @@ async function getSavedRecipes(username) {
 }
 
 
+async function getCreatedRecipes(username) {
+    let connection;
+    try {
+        connection = await oracledb.getConnection(dbConfig);
+        const result = await connection.execute(
+            `SELECT r.RecipeID, r.Title, r.RecipeDescription, AVG(rt.Rating) AS AvgRating
+            FROM RecipeCreatesSortedBy r
+            LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
+            LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
+            WHERE r.Username = :username
+            GROUP BY r.RecipeID, r.Title, r.RecipeDescription
+            `,
+            [username],
+        );
+        return result.rows;
+    } catch (err) {
+        console.error('Error fetching your recipes:', err);
+        throw err;
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                console.error('Error closing connection:', err);
+            }
+        }
+    }
+}
+
+
 module.exports = {
     testOracleConnection,
     initiateAlltables,
@@ -396,5 +426,6 @@ module.exports = {
     loginUser,
     signupUser,
     getUserDetails,
-    getSavedRecipes
+    getSavedRecipes,
+    getCreatedRecipes
 };
