@@ -188,6 +188,7 @@ CREATE TABLE ClassifiesBy
 CREATE TABLE Saves (
    RecipeID INTEGER,
    Username VARCHAR(60),
+   PRIMARY KEY (RecipeID, Username),
    FOREIGN KEY (RecipeID) REFERENCES RecipeCreatesSortedBy(RecipeID) ON DELETE CASCADE,
    FOREIGN KEY (Username) REFERENCES UserDetails(Username) ON DELETE CASCADE
 );

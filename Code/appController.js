@@ -169,6 +169,15 @@ router.post("/signup", async (req, res) => {
     }
 });
 
+router.get('/api/user/:username/saved-recipes', async (req, res) => {
+    try {
+        const username = req.params.username;
+        const recipes = await appService.getSavedRecipes(username);
+        res.json({ data: recipes });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch saved recipes' });
+    }
+});
 
 
 

@@ -118,7 +118,7 @@ async function fetchRecipesFromDb() {
 }
 async function checkLoginStatus() {
     try {
-        const response = await fetch('/checkLoginStatus'); // Adjust the endpoint to your actual API
+        const response = await fetch('/checkLoginStatus');
         const data = await response.json();
         return data.isLoggedIn;
     } catch (error) {
@@ -346,6 +346,37 @@ async function signupUser(city,provinceState,username, password,phoneNo,email,na
     });
 }
 
+async function getSavedRecipes(username) {
+    let connection;
+    try {
+        connection = await oracledb.getConnection(dbConfig);
+        const result = await connection.execute(
+            `SELECT r.RecipeID, r.Title, r.RecipeDescription, COALESCE(AVG(rt.Rating), 0) AS AvgRating
+             FROM RecipeCreatesSortedBy r
+                      JOIN Saves sr ON r.RecipeID = sr.RecipeID
+                      LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
+                      LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
+             WHERE sr.Username = :username
+             GROUP BY r.RecipeID, r.Title, r.RecipeDescription
+            `,
+            [username],
+            { outFormat: oracledb.OUT_FORMAT_OBJECT } // TODO: Check tomorrow if this is needed
+        );
+        return result.rows;
+    } catch (err) {
+        console.error('Error fetching saved recipes:', err);
+        throw err;
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                console.error('Error closing connection:', err);
+            }
+        }
+    }
+}
+
 
 module.exports = {
     testOracleConnection,
@@ -362,5 +393,6 @@ module.exports = {
     saveRecipe,
     loginUser,
     signupUser,
-    getUserDetails
+    getUserDetails,
+    getSavedRecipes
 };

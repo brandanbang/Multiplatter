@@ -40,4 +40,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         localStorage.removeItem('username');
         window.location.href = 'signIn.html';
     });
+    document.getElementById('savedRecipesLink').addEventListener('click', (event) => {
+        event.preventDefault();
+        window.location.href = `savedRecipes.html?username=${username}`;
+    });
+
+    document.getElementById('createdRecipesLink').addEventListener('click', (event) => {
+        event.preventDefault();
+        window.location.href = `createdRecipes.html?username=${username}`;
+    });
 });
