@@ -351,7 +351,7 @@ async function getSavedRecipes(username) {
     try {
         connection = await oracledb.getConnection(dbConfig);
         const result = await connection.execute(
-            `SELECT r.RecipeID, r.Title, r.RecipeDescription, COALESCE(AVG(rt.Rating), 0) AS AvgRating
+            `SELECT r.RecipeID, r.Title, r.RecipeDescription, AVG(rt.Rating) AS AvgRating
              FROM RecipeCreatesSortedBy r
                       JOIN Saves sr ON r.RecipeID = sr.RecipeID
                       LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
@@ -359,8 +359,8 @@ async function getSavedRecipes(username) {
              WHERE sr.Username = :username
              GROUP BY r.RecipeID, r.Title, r.RecipeDescription
             `,
-            [username],
-            { outFormat: oracledb.OUT_FORMAT_OBJECT } // TODO: Check tomorrow if this is needed
+            [username]
+            //{ outFormat: oracledb.OUT_FORMAT_OBJECT } // TODO: Check tomorrow if this is needed
         );
         return result.rows;
     } catch (err) {

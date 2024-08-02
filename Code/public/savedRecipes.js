@@ -21,13 +21,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         data.data.forEach(recipe => {
-            const [RecipeID, title, avgRating] = recipe; // Adjust according to your API response
+            const [id, title, description, avgRating] = recipe;
 
             const recipeCard = document.createElement('div');
             recipeCard.classList.add('recipe-card');
 
             const img = document.createElement('img');
-            //img.src = photo || 'default-image.jpg'; // Provide a default image if none is available
+            //img.src = photo || 'default-image.jpg';
             img.alt = title || 'No title';
 
             const titleDiv = document.createElement('div');
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const ratingDiv = document.createElement('div');
             ratingDiv.classList.add('rating');
             ratingDiv.textContent = `Average Rating: ${avgRating !== null && avgRating !== undefined ? avgRating.toFixed(2) : 'N/A'}`;
-
+            //ratingDiv.textContent = `Average Rating: ${avgRating !== null && avgRating !== undefined ? avgRating.toFixed(2) : 'N/A'}`;
             recipeCard.appendChild(img);
             recipeCard.appendChild(titleDiv);
             recipeCard.appendChild(ratingDiv);
