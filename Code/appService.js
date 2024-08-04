@@ -116,6 +116,21 @@ async function fetchRecipesFromDb() {
         return [];
     });
 }
+
+async function fetchRecipesFromDbById(id) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT *
+            FROM RECIPECREATESSORTEDBY
+            WHERE RecipeID = :id`,
+            [id]
+        );
+        return result.rows[0];
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function checkLoginStatus() {
     try {
         const response = await fetch('/checkLoginStatus');
@@ -335,11 +350,11 @@ async function signupUser(city,provinceState,username, password,phoneNo,email,na
         const result2 = await connection.execute(
             `INSERT INTO USERDETAILS (Username,Password, PhoneNo, Email, Name) 
             VALUES (:username,:password,:phoneNo, :email,:name) `,
-                [username,password,phoneNo,email,name],
-                {autoCommit: true}
+            [username,password,phoneNo,email,name],
+            {autoCommit: true}
 
-            );
-            return result1.rowsAffected > 0 && result2.rowsAffected > 0;
+        );
+        return result1.rowsAffected > 0 && result2.rowsAffected > 0;
 
     }).catch(() => {
         return false;
@@ -382,6 +397,7 @@ module.exports = {
     testOracleConnection,
     initiateAlltables,
     fetchRecipesFromDb,
+    fetchRecipesFromDbById,
     fetchRatingsFromDb,
     fetchDemotableFromDb,
     initiateDemotable,

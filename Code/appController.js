@@ -2,6 +2,8 @@ const express = require('express');
 const appService = require('./appService');
 
 const router = express.Router();
+const path = require('path');
+
 
 // ----------------------------------------------------------
 // API endpoints
@@ -115,6 +117,26 @@ router.post('/saveRecipe', async (req, res) => {
     } catch (error) {
         console.error('Error saving recipe:', error);
         res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.get('/api/recipe/:id(\\d+)', async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const data = await appService.fetchRecipesFromDbById(id);
+
+        if (data) {
+            // const routePath = path.join(__dirname, '/public/somerecipe.html');
+            // console.log(routePath);
+
+            // res.sendFile(routePath);
+            res.json(data);
+        } else {
+            res.status(404).json({error: 'Data not found'});
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: 'Error fetching data'});
     }
 });
 

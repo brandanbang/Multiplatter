@@ -35,6 +35,27 @@ h1 {
     height: 28px;
     padding-top: 100px;
 }
+
+h2 {
+    font-family: "Arial Black";
+    color: #006400;
+    height: 20px;
+}
+
+h3 {
+    font-family: "Arial Black";
+    margin-left: 230px;
+    color: #006400;
+    height: 20px;
+}
+
+p {
+    font-family: "Arial Black";
+    margin-left: 230px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
 /*hr {*/
 /*    border-top: 2px solid rgb(44, 51, 62);*/
 /*    margin: auto;*/
@@ -399,3 +420,26 @@ input, textarea {
 input::placeholder, textarea::placeholder {
     color: #aaa;
 }
+
+.recipe-info {
+    color: #556b2f;
+    font-family: "Arial Black";
+    margin-left: 230px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.ingredients {
+    font-family: "Arial Black";
+    margin-left: 230px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.instructions {
+    font-family: "Arial Black";
+    margin-left: 230px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
