@@ -130,6 +130,7 @@ h1 {
 }
 
 #recipes-container {
+    margin-top: 200px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -320,17 +321,17 @@ footer {
     width: 100px;
     margin-right: 10px;
 }
-/*.filterGroup {*/
-/*    font-size: 16px;*/
-/*    height: 35px;*/
-/*    width: 100px;*/
-/*    margin-right: 15px;*/
-/*    background-color:whitesmoke ;*/
-/*    border-color:whitesmoke  ;*/
-/*    border-radius: 4px;*/
-/*    font-family: Arial;*/
-/*    margin-left: 15px;*/
-/*}*/
+.filterGroup ,.filterRating ,.filter{
+    font-size: 16px;
+    height: 35px;
+    width: 100px;
+    margin-right: 15px;
+    background-color:whitesmoke ;
+    border-color:whitesmoke  ;
+    border-radius: 4px;
+    font-family: Arial;
+    margin-left: 15px;
+}
 
 /*.filter {*/
 /*    font-size: 16px;*/
@@ -417,3 +418,35 @@ input::placeholder, textarea::placeholder {
     margin-left: 210px;
     margin-top: 130px;
 }
+.filter {
+margin-left: 210px;
+padding: 0px;
+border: 1px solid #ddd;
+border-radius: 8px;
+background-color: #fff;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+flex: 1;
+/*   width:500px; */
+}
+
+
+.filterBar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 200px;
+}
+
+.filterBar select {
+    padding: 10px;
+    font-size: 15px;
+    font-family: Georgia;
+    border-color:transparent;
+    border-radius: 4px;
+    margin-right:10px;
+}
+
+#addFilterButton {
+    background-color: #3B4D2B;
+}
+

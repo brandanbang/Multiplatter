@@ -34,13 +34,32 @@ document.addEventListener('DOMContentLoaded', async () => {
             titleDiv.classList.add('title');
             titleDiv.textContent = title || 'No title';
 
+
             const ratingDiv = document.createElement('div');
             ratingDiv.classList.add('rating');
             ratingDiv.textContent = `Average Rating: ${avgRating !== null && avgRating !== undefined ? avgRating.toFixed(2) : 'N/A'}`;
             //ratingDiv.textContent = `Average Rating: ${avgRating !== null && avgRating !== undefined ? avgRating.toFixed(2) : 'N/A'}`;
+
+            // const removeButton = document.createElement('button');
+            // removeButton.classList.add('remove-button');
+            // removeButton.innerHTML = 'x';
+            // heartButton.addEventListener('click', async () => {
+            //
+            //     //const isLoggedIn = await checkLoginStatus();
+            //     if (!username) {
+            //         alert('Please log in to save recipes');
+            //         window.location.href = 'signIn.html';
+            //         return;
+            //     } else {
+            //         saveRecipe(id, username);
+            //     }
+            //
+            // });
+
             recipeCard.appendChild(img);
             recipeCard.appendChild(titleDiv);
             recipeCard.appendChild(ratingDiv);
+            // recipeCard.appendChild(removeButton);
 
             recipesContainer.appendChild(recipeCard);
         });

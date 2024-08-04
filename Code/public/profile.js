@@ -49,4 +49,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         event.preventDefault();
         window.location.href = `createdRecipes.html?username=${username}`;
     });
+
+    document.getElementById('deleteAccountlink').addEventListener('click', (event) => {
+        event.preventDefault();
+        window.location.href = `deleteAccount.html?username=${username}`;
+    });
 });

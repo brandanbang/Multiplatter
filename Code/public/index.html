@@ -27,6 +27,7 @@
 </div>
 <script src="scripts.js"></script>
 <script src="sidebar.js"></script>
+<script src="searchbar.js"></script>
 
 
 <header class="Header">
@@ -37,8 +38,6 @@
 
 <section class="slideshow" id="HomeSlideshow">
     <div class="slideHeader">POPULAR RECIPES</div>
-    <!--    <button class="slideButtonL">&#10096</button>-->
-    <!--    <button class="slideButtonR">&#10097</button>-->
     <div class="slides" >
         <div class="slide">
             <div class="slideRecipe">
@@ -72,51 +71,50 @@
 <br>
 <br>
 
-<section class="searchbar">
-    <input type="text" id="searchbartext" placeholder="Search recipes...">
-    <select class="filter"> Filter
-        <option value="All">All</option>
-        <optgroup label="Meal Type">
-            <option value="breakfast">breakfast</option>
-            <option value="lunch">lunch</option>
-            <option value="dinner">dinner</option>
-            <option value="dessert">dessert</option>
-        </optgroup>
-        <optgroup label="Duration">
-            <option value="< 10 minutes>">< 10 minutes</option>
-            <option value="< 30 minutes">< 30 minutes</option>
-            <option value="< 1 hour">< 1 hour</option>
-        </optgroup>
-        <optgroup label="Cuisine">
-            <option value="French">French</option>
-            <option value="American">American</option>
-            <option value="Japanese">Japanese</option>
-            <option value="Indian">Indian</option>
-            <option value="Mexican">Mexican</option>
-            <option value="Japanese">Japanese</option>
-        </optgroup>
-        <optgroup label="Rating">
-            <option value="excellent">>4</option>
-            <option value="good">4-3</option>
-            <option value="adequate/bad"><3</option>
-        </optgroup>
-        <optgroup label="Taste">
-            <option value="spicy">spicy</option>
-            <option value="sweet">sweet</option>
-            <option value="savoury">savoury</option>
-            <option value="sour">sour</option>
-        </optgroup>
-        <optgroup label="Dietary Restriction">
-            <option value="vegan">vegan</option>
-            <option value="vegetarian">vegetarian</option>
-            <option value="halal">halal</option>
-            <option value="keto">keto</option>
-            <option value="gluten free">gluten free</option>
-        </optgroup>
-    </select>
-    <button id="searchButton"> GO</button>
-    <div id="results"></div>
-</section>
+<!--<section class="searchbar">-->
+<!--    <input type="text" id="searchbartext" placeholder="Search recipes...">-->
+<!--    <select class="filterGroup" id="filterGroup" onchange="updateFilterOptions()"> Filter-->
+<!--        <option value="All">All</option>-->
+<!--        <option value="mealType">Meal Type</option>-->
+<!--        <option value="cuisine">Cuisine</option>-->
+<!--        <option value="taste">Taste</option>-->
+<!--        <option value="diet">Dietary Restriction</option>-->
+<!--    </select>-->
+
+<!--    <select class="filter" id="filter">-->
+<!--        <option value=""></option>-->
+<!--    </select>-->
+
+<!--    <select class="filterRating" id="filterRating">-->
+<!--        <optgroup>-->
+<!--            <option value="noRating">Ratings</option>-->
+<!--            <option value="5">5+</option>-->
+<!--            <option value="4">4+</option>-->
+<!--            <option value="3">3+</option>-->
+<!--            <option value="2">2+</option>-->
+<!--            <option value="1">1+</option>-->
+<!--        </optgroup>-->
+<!--    </select>-->
+
+<!--    <button id="searchButton">GO</button>-->
+<!--    <div id="results"></div>-->
+<!--</section>-->
+<!--<div id="filterContainer">-->
+<!--<div class="filter" id="filter">-->
+<!--    <div class="filterBar" id="filterBar">-->
+<!--        <select class="options">-->
+<!--            <option value="breakfast">breakfast</option>-->
+<!--            <option value="lunch">lunch</option>-->
+<!--            <option value="dinner">dinner</option>-->
+<!--            <option value="dessert">dessert</option>-->
+<!--        </select>-->
+<!--        <button id="addFilterButton" >+</button>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</div>-->
+<!--<br>-->
+<!--<button id="searchButton">GO</button>-->
+
 
 <section>
     <footer class="Footer">
@@ -124,9 +122,5 @@
     </footer>
 </section>
 
-
-<!-- ===================================================================================== -->
-<!-- External JavaScript file that contains the functionality/logic for the operations above. -->
-<!--    <script src="scripts.js"></script>-->
 </body>
 </html>
