@@ -80,14 +80,6 @@ async function testOracleConnection() {
     });
 }
 
-async function fetchDemotableFromDb() {
-    return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT * FROM DEMOTABLE');
-        return result.rows;
-    }).catch(() => {
-        return [];
-    });
-}
 
 //SQL Statements to create and insert initial values for all tables
 async function initiateAlltables() {
@@ -154,95 +146,29 @@ async function fetchRatingsFromDb() {
     });
 }
 
-
-async function initiateDemotable() {
-    return await withOracleDB(async (connection) => {
-        try {
-            await connection.execute(`DROP TABLE DEMOTABLE`);
-        } catch (err) {
-            console.log('Table might not exist, proceeding to create...');
-        }
-
-        const result = await connection.execute(`
-            CREATE TABLE DEMOTABLE (
-                id NUMBER PRIMARY KEY,
-                name VARCHAR2(20)
-            )
-        `);
-        return true;
-    }).catch(() => {
-        return false;
-    });
-}
-
-async function insertDemotable(id, name) {
-    return await withOracleDB(async (connection) => {
-        const result = await connection.execute(
-            `INSERT INTO DEMOTABLE (id, name) VALUES (:id, :name)`,
-            [id, name],
-            {autoCommit: true}
-        );
-
-        return result.rowsAffected && result.rowsAffected > 0;
-    }).catch(() => {
-        return false;
-    });
-}
-
-async function updateNameDemotable(oldName, newName) {
-    return await withOracleDB(async (connection) => {
-        const result = await connection.execute(
-            `UPDATE DEMOTABLE SET name=:newName where name=:oldName`,
-            [newName, oldName],
-            {autoCommit: true}
-        );
-
-        return result.rowsAffected && result.rowsAffected > 0;
-    }).catch(() => {
-        return false;
-    });
-}
-
-async function countDemotable() {
-    return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT Count(*) FROM DEMOTABLE');
-        return result.rows[0][0];
-    }).catch(() => {
-        return -1;
-    });
-}
-
 async function saveRecipe(recipeId, username) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('INSERT INTO Saves (RecipeID, Username) VALUES (:recipeId, :username)',
             [recipeId, username],
-            { autoCommit: true });
+            {autoCommit: true});
 
-    }).catch(() =>{
+    }).catch(() => {
         return false;
     })
-
 }
 
-// async function loginUser(username,password){
-//         return await withOracleDB(async (connection) => {
-//             const result = await connection.execute(`
-//             SELECT u.Username,u.Password
-//             FROM UserDetails u
-//             WHERE u.Username = :username AND u.Password = :password;
-//         `,[username,password]);
-//             if (result.rows.length >0) {
-//              console.log('Login Successful!');
-//                 return result.rowsAffected && result.rowsAffected > 0;
-//             } else {
-//             console.log('Username does not exist');
-//                 return result.rowsAffected && result.rowsAffected > 0;
-//             }
-//             // return result.rows;
-//     }).catch(() => {
+// async function removeSave(recipeId, username) {
+//     return await withOracleDB(async (connection) => {
+//         const result = await connection.execute('' +
+//             'INSERT INTO Saves (RecipeID, Username) VALUES (:recipeId, :username)',
+//             [recipeId, username],
+//             { autoCommit: true });
+//
+//     }).catch(() =>{
 //         return false;
-//     });
-// }
+//     })
+
+
 
 async function loginUser(username, password) {
     return await withOracleDB(async (connection) => {
@@ -331,7 +257,7 @@ async function signupUser(city,provinceState,username, password,phoneNo,email,na
         const result1 = await connection.execute(
             `INSERT INTO UserLocation (PhoneNo, ProvinceState, City) 
             VALUES (:phoneNo, :provinceState, :city) `,
-            [phoneNo,provinceState,city],{autocommit: true});
+            [phoneNo,provinceState,city],{autoCommit: true});
 
 
         const result2 = await connection.execute(
@@ -409,17 +335,65 @@ async function getCreatedRecipes(username) {
     }
 }
 
+// async function filter(descriptor,rating) {
+//     let connection;
+//     try {
+//         connection = await oracledb.getConnection(dbConfig);
+//         const result = await connection.execute(
+//             `SELECT r.RecipeID, r.Title, r.RecipeDescription, AVG(rt.Rating) AS AvgRating
+//             FROM RecipeCreatesSortedBy r
+//             LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
+//             LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
+//             WHERE r.Username = :username
+//             GROUP BY r.RecipeID, r.Title, r.RecipeDescription
+//             `,
+//             [username],
+//         );
+//         return result.rows;
+//     } catch (err) {
+//         console.error('Error fetching your recipes:', err);
+//         throw err;
+//     } finally {
+//         if (connection) {
+//             try {
+//                 await connection.close();
+//             } catch (err) {
+//                 console.error('Error closing connection:', err);
+//             }
+//         }
+//     }
+// }
+
+async function deleteAcount(phoneNo) {
+    let connection;
+    try {
+        connection = await oracledb.getConnection(dbConfig);
+        const result = await connection.execute(
+            `DELETE FROM UserLocation WHERE PhoneNo = :phoneNo`,
+            [phoneNo],
+            {autoCommit:true}
+        );
+        return result.rowsAffected > 0 && result.rowsAffected > 0;
+    } catch (err) {
+        console.error('Error!', err);
+        throw err;
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                console.error('Error closing connection', err);
+            }
+        }
+    }
+}
+
 
 module.exports = {
     testOracleConnection,
     initiateAlltables,
     fetchRecipesFromDb,
     fetchRatingsFromDb,
-    fetchDemotableFromDb,
-    initiateDemotable,
-    insertDemotable,
-    updateNameDemotable,
-    countDemotable,
     fetchRecipesWithAvgRating,
     checkLoginStatus,
     saveRecipe,
@@ -427,5 +401,8 @@ module.exports = {
     signupUser,
     getUserDetails,
     getSavedRecipes,
-    getCreatedRecipes
+    getCreatedRecipes,
+    // removeSave
+    deleteAcount
+
 };

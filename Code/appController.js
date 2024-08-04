@@ -47,62 +47,13 @@ router.post("/initiate-all-tables", async (req, res) => {
     }
 });
 
-router.get('/demotable', async (req, res) => {
-    const tableContent = await appService.fetchDemotableFromDb();
-    res.json({data: tableContent});
-});
-
-router.post("/initiate-demotable", async (req, res) => {
-    const initiateResult = await appService.initiateDemotable();
-    if (initiateResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
-
-router.post("/insert-demotable", async (req, res) => {
-    const { id, name } = req.body;
-    const insertResult = await appService.insertDemotable(id, name);
-    if (insertResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
-
-router.post("/update-name-demotable", async (req, res) => {
-    const { oldName, newName } = req.body;
-    const updateResult = await appService.updateNameDemotable(oldName, newName);
-    if (updateResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
-
-router.get('/count-demotable', async (req, res) => {
-    const tableCount = await appService.countDemotable();
-    if (tableCount >= 0) {
-        res.json({
-            success: true,
-            count: tableCount
-        });
-    } else {
-        res.status(500).json({
-            success: false,
-            count: tableCount
-        });
-    }
-});
 
 // Check login status route
-// router.get('/checkLoginStatus', (req, res) => {
-//     const isLoggedIn = req.session && req.session.user;
-//     res.json({ isLoggedIn });
-// });
+router.get('/checkLoginStatus', (req, res) => {
+    const isLoggedIn = req.session && req.session.user;
+    res.json({ isLoggedIn });
+});
 
-// Save recipe route
 router.post('/saveRecipe', async (req, res) => {
     // const username = localStorage.getItem('username');
     // if (!username) {
@@ -118,19 +69,21 @@ router.post('/saveRecipe', async (req, res) => {
     }
 });
 
-// router.post("/logintable", async (req, res) => {
-//     console.log("in appcontroller");
-//     const {Username,Password} = req.body;
-//     const insertResult = await appService.loginUser(Username,Password);
-//     console.log("in appcontroller again");
-//     console.log(insertResult);
-//     if (insertResult.success) {
+// router.post('/removeSaves', async (req, res) => {
+//     // const username = localStorage.getItem('username');
+//     // if (!username) {
+//     //     return res.status(401).json({ error: 'Unauthorized' });
+//     // }
+//     const { recipeId, username } = req.body;
+//     //const username = req.session.user.username;
+//     const removeResult = await appService.removeSave(recipeId, username);
+//     if (removeResult) {
 //         res.json({ success: true });
 //     } else {
-//         // res.status(500).json({ success: false });
-//         res.json({success: false});
+//         res.json({ success: false });
 //     }
 // });
+
 router.post("/logintable", async (req, res) => {
     const { Username, Password } = req.body;
     const loginResult = await appService.loginUser(Username, Password);
@@ -180,6 +133,7 @@ router.get('/api/user/:username/saved-recipes', async (req, res) => {
 });
 
 
+
 router.get('/api/user/:username/created-recipes', async (req, res) => {
     try {
         const username = req.params.username;
@@ -189,5 +143,23 @@ router.get('/api/user/:username/created-recipes', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch saved recipes' });
     }
 });
+
+router.post("/api/user/deleteAccount", async (req, res) => {
+    try {
+        const {PhoneNo} = req.body;
+        const deleteResult = await appService.deleteAcount( PhoneNo);
+        if (deleteResult) {
+            res.json({success: true});
+
+        } else {
+            res.json({success: false});
+        }
+
+    } catch (err) {
+        res.status(500).json({error: 'Internal Server Errors'});
+    }
+});
+
+
 
 module.exports = router;

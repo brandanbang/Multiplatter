@@ -124,7 +124,7 @@ CREATE TABLE FeedbackRespondsWithEngagesWith
     RecipeID INTEGER,
     Username VARCHAR(60),
     FOREIGN KEY (RecipeID) REFERENCES RecipeCreatesSortedBy(RecipeID) ON DELETE CASCADE,
-    FOREIGN KEY (Username) REFERENCES UserDetails(Username)
+    FOREIGN KEY (Username) REFERENCES UserDetails(Username) ON DELETE CASCADE
 );
 CREATE TABLE CommentsRepliesTo
 (
