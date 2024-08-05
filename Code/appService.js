@@ -351,64 +351,64 @@ async function deleteAcount(phoneNo) {
     }
 }
 
-
 async function getFilteredRecipes(filters) {
-    let connection;
     console.log(filters);
     let sqlCode = `
         SELECT r.RecipeID, r.Title, r.RecipeDescription, AVG(rt.Rating) as AvgRating
         FROM RECIPECREATESSORTEDBY r
         LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
         LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
-         `;
-    let condition = [];
-    condition.push('')
-    let ratingCondition = [];
+    `;
 
-    console.log('filters in as 99', filters)
+    let conditions = [];
+    let ratingCondition = '';
 
-    filters.forEach(filter => {
-        const { option, optionType, andOr } = filter;
+    filters.forEach((filter, index) => {
+        const { option, rating, andOr } = filter;
         let currentCondition = '';
         let currentConditionRating = '';
-        if (optionType === 'descriptor') {
+
+        if (option) {
             currentCondition = `r.DescriptorName = '${option}'`;
-            console.log(currentCondition);
-        } else if (optionType === 'rating') {
-            currentConditionRating = `HAVING AVG(rt.Rating) >= ${option}`;
-            console.log(currentCondition);
-            ratingCondition.push(currentConditionRating);
-            console.log(currentConditionRating);
         }
 
-        if (andOr !== '') {
-            condition.push(`${andOr} ${currentCondition}`);
-            console.log(condition);
-        } else {
+        if (currentCondition) {
+            if (index > 0 && andOr) {
+                conditions.push(`${andOr} ${currentCondition}`);
+            } else {
+                conditions.push(currentCondition);
+            }
+        }
 
-            condition.push(`${currentCondition}`);
+        if (rating) {
+            currentConditionRating = `AVG(rt.Rating) >= ${rating}`;
+        }
 
+        if (currentConditionRating) {
+            ratingCondition = `HAVING ${currentConditionRating}`;
         }
     });
-    console.log('confirm');
-    console.log(condition);
 
-    if (condition.length >0) {
-        sqlCode = sqlCode + ' ' + condition.join(' ') + ' ' + 'GROUP BY r.RecipeID, r.Title, r.RecipeDescription'
-            + ' ' + ratingCondition.join(' ');
+    console.log( conditions);
+    console.log(ratingCondition);
+
+    if(conditions.length > 0) {
+        sqlCode += ' '  + 'WHERE ' + conditions.join(' ')+ ' ' +
+            'GROUP BY r.RecipeID, r.Title, r.RecipeDescription ' + ratingCondition;
     } else {
-        sqlCode = sqlCode  + ' ' + 'GROUP BY r.RecipeID, r.Title, r.RecipeDescription'
-            + ratingCondition.join(' ');
+        sqlCode +=' ' + 'GROUP BY r.RecipeID, r.Title, r.RecipeDescription '
+            +  ratingCondition;
     }
-    console.log(sqlCode);
-    console.log('confirm');
 
+    console.log(sqlCode);
+
+    let connection;
     try {
         connection = await oracledb.getConnection(dbConfig);
         const result = await connection.execute(sqlCode);
         return result.rows;
     } catch (err) {
-        console.error('Error fetching filtered recipes', err);
+        console.error('Error fetching filtered recipes:', err);
         throw err;
     } finally {
         if (connection) {
@@ -419,8 +419,39 @@ async function getFilteredRecipes(filters) {
             }
         }
     }
-
 }
+
+async function findTopUser() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `SELECT r.Username FROM RECIPECREATESSORTEDBY r 
+            LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
+            LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
+            GROUP BY r.Username
+            HAVING AVG(rt.Rating) >= ALL (SELECT AVG(rt2.Rating)
+                                                 FROM RATING rt2
+                                                 LEFT JOIN FeedbackRespondsWithEngagesWith f on f.FeedbackID = rt2.FeedbackID
+                                                 LEFT JOIN RecipeCreatesSortedBy r2 on r2.RecipeID = f.RecipeID
+                                                 GROUP BY r2.Username) `);
+        if (result.rows.length > 0) {
+
+            console.log(result.rows);
+
+            let usernames = [];
+            for (let i = 0; i < result.rows.length; i++) {
+                usernames.push(result.rows[i]);
+            }
+            console.log(usernames);
+            return usernames;
+        } else {
+            return []
+        }
+    }).catch((err) => {
+        console.error('Error fetching top user:', err);
+        return [];
+    });
+}
+
 
 module.exports = {
     testOracleConnection,
@@ -436,6 +467,7 @@ module.exports = {
     getSavedRecipes,
     getCreatedRecipes,
     deleteAcount,
-    getFilteredRecipes
+    getFilteredRecipes,
+    findTopUser
 
 };

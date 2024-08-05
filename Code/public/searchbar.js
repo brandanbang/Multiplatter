@@ -59,14 +59,15 @@ async function filterRecipes() {
         const option = options ? options.value : '';
         const andOrs = filterBars[i].getElementsByClassName('andOr')[0];
         const andOr = andOrs ? andOrs.value : '';
-
-        const isNumeric = !isNaN(option);
-        const type = isNumeric ? 'rating' : 'descriptor';
-        console.log(option, type, andOr);
+        const ratings = filterBars[i].getElementsByClassName('ratings')[0];
+        const rating = ratings ? ratings.value : '';
+        // const isNumeric = !isNaN(option);
+        // const type = isNumeric ? 'rating' : 'descriptor';
+        console.log(option, rating, andOr);
 
         filters.push({
             option: option,
-            optionType: type,
+            rating: rating,
             andOr: andOr
         });
 

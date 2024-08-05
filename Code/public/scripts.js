@@ -248,8 +248,29 @@ async function signUp(event) {
     }
 }
 
+
+async function displayTopUser() {
+    console.log('in  display');
+        const response = await fetch('/topUser', {
+            method: 'GET'
+        });
+
+        const responseData = await response.json();
+        console.log(responseData);
+
+        const topUserVal = document.getElementById('topUserVal');
+        if (responseData.data.length > 0) {
+            topUserVal.textContent = responseData.data.join(', ');
+        } else {
+            topUserVal.textContent = 'No top users yet!';
+        }
+}
+
+
 window.onload = function() {
     checkDbConnection();
+    displayTopUser();
     document.getElementById("loginform").addEventListener("submit", login);
     document.getElementById("signUpform").addEventListener("submit", signUp);
+
 };

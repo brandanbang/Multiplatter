@@ -104,7 +104,7 @@ router.post("/signup", async (req, res) => {
         }
 
     } catch (err) {
-        res.status(500).json({error: 'Internal Server Errors'});
+        res.status(500).json({error: 'Failed to Sign up!'});
     }
 });
 
@@ -126,7 +126,7 @@ router.get('/api/user/:username/created-recipes', async (req, res) => {
         const recipes = await appService.getCreatedRecipes(username);
         res.json({ data: recipes });
     } catch (err) {
-        res.status(500).json({ error: 'Failed to fetch saved recipes' });
+        res.status(500).json({ error: 'Failed to fetch created recipes' });
     }
 });
 
@@ -142,7 +142,7 @@ router.post('/api/user/deleteAccount', async (req, res) => {
         }
 
     } catch (err) {
-        res.status(500).json({error: 'Internal Server Errors'});
+        res.status(500).json({error: 'failed to delete account'});
     }
 });
 
@@ -153,7 +153,19 @@ router.post('/filteredRecipes', async (req, res) => {
         const recipes = await appService.getFilteredRecipes(filters);
         res.json({ data: recipes });
     } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: 'could not filter '});
     }
 });
+
+router.get('/topUser', async (req, res) => {
+    try {
+        const tableContent = await appService.findTopUser();
+        console.log( tableContent);
+        res.json({ data: tableContent });
+    } catch (err) {
+        console.error('Error getting user', err);
+        res.status(500).json({ error: 'no top user yet!' });
+    }
+});
+
 module.exports = router;

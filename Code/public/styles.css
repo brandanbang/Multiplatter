@@ -431,3 +431,32 @@ input::placeholder, textarea::placeholder {
     margin-left: 10px;
     display: flex;
 }
+
+.topUser {
+    /*margin-top: 20px;*/
+    margin-left: 210px;
+    width: 150px;
+    height: 300px;
+    /*display: flex;*/
+    text-align: center;
+    /*border-radius: 10px;*/
+    /*border: 10px solid  ;*/
+    /*border-color: #3B4D2B;*/
+    /*overflow: scroll;*/
+
+}
+
+
+#topUser {
+    font-family: Impact;
+    font-size: 50px;
+    /*align-text: center;*/
+    /*overflow: scroll;*/
+
+}
+
+#topUserVal {
+    font-family: Impact;
+    font-size: 30px;
+    /*overflow: scroll;*/
+}
