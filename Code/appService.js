@@ -353,6 +353,7 @@ async function deleteAcount(phoneNo) {
 
 
 async function getFilteredRecipes(filters) {
+    let connection;
     console.log(filters);
     let sqlCode = `
         SELECT r.RecipeID, r.Title, r.RecipeDescription, AVG(rt.Rating) as AvgRating
@@ -360,42 +361,43 @@ async function getFilteredRecipes(filters) {
         LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
         LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
          WHERE `;
-    let condition = '';
+    let condition = [];
 
-    console.log('filters in as', filters)
+    console.log('filters in as ', filters)
 
     filters.forEach(filter => {
         const { option, optionType, andOr } = filter;
         let currentCondition = '';
         if (optionType === 'descriptor') {
-            currentCondition = `r.DescriptorName = :option`;
+            currentCondition = `r.DescriptorName = '${option}'`;
             console.log(currentCondition);
         } else if (optionType === 'rating') {
-            currentCondition = `rt.Rating >= :option`;
+            currentCondition = `rt.Rating >= ${option}`;
             console.log(currentCondition);
         }
 
         if (andOr !== '') {
-                console.log('and/or is');
-                condition.concat(' ');
-                condition.concat(`:andOr ${currentCondition}`);
+            condition.push(`${andOr} ${currentCondition}`);
+            console.log(condition);
         } else {
-                condition.concat(' ');
-                condition.concat(`${currentCondition}`);
-            }
+
+            condition.push(`${currentCondition}`);
+
+        }
     });
+    console.log('confirm');
     console.log(condition);
 
-    sqlCode = sqlCode + ' ' + condition + ' ' + 'GROUP BY r.RecipeID, r.Title, r.RecipeDescription';
+    sqlCode = sqlCode + ' ' + condition.join(' ') + ' ' + 'GROUP BY r.RecipeID, r.Title, r.RecipeDescription';
     console.log(sqlCode);
-let connection;
+    console.log('confirm');
+
     try {
         connection = await oracledb.getConnection(dbConfig);
         const result = await connection.execute(sqlCode);
-        console.log(result)
         return result.rows;
     } catch (err) {
-        console.error('Database query error:', err);
+        console.error('Error fetching filtered recipes', err);
         throw err;
     } finally {
         if (connection) {
@@ -406,6 +408,7 @@ let connection;
             }
         }
     }
+
 }
 
 module.exports = {
