@@ -401,24 +401,12 @@ async function getFilteredRecipes(filters) {
     }
 
     console.log(sqlCode);
-
-    let connection;
-    try {
-        connection = await oracledb.getConnection(dbConfig);
+    return await withOracleDB(async (connection) => {
         const result = await connection.execute(sqlCode);
         return result.rows;
-    } catch (err) {
-        console.error('Error fetching filtered recipes:', err);
-        throw err;
-    } finally {
-        if (connection) {
-            try {
-                await connection.close();
-            } catch (err) {
-                console.error('Error closing connection:', err);
-            }
-        }
-    }
+    }).catch(() => {
+        return [];
+    });
 }
 
 async function findTopUser() {
