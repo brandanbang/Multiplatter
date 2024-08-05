@@ -1,6 +1,7 @@
 const express = require('express');
 const appController = require('./appController');
 const bodyParser = require('body-parser'); // Importing body-parser
+const path = require('path');
 
 // Load environment variables from .env file
 // Ensure your .env file has the required database credentials.
@@ -27,6 +28,11 @@ app.use(express.json());             // Parse incoming JSON payloads
 
 // mount the router
 app.use('/', appController);
+
+// api routing for individual recipe view
+app.get('/recipe/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'somerecipe.html'));
+});
 
 
 // ----------------------------------------------------------

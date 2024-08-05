@@ -35,6 +35,27 @@ h1 {
     height: 28px;
     padding-top: 100px;
 }
+
+h2 {
+    font-family: "Arial Black";
+    color: #006400;
+    height: 20px;
+}
+
+h3 {
+    font-family: "Arial Black";
+    margin-left: 230px;
+    color: #006400;
+    height: 20px;
+}
+
+p {
+    font-family: "Arial Black";
+    margin-left: 230px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
 /*hr {*/
 /*    border-top: 2px solid rgb(44, 51, 62);*/
 /*    margin: auto;*/
@@ -261,14 +282,12 @@ button {
     height: 360px;
     margin-right: 20px;
     border: 4px solid darkolivegreen;
-
 }
 
 .slideRecipe {
     width: 100%;
     height: 360px;
     overflow: hidden;
-
 }
 
 .slideCaption {
@@ -282,7 +301,6 @@ button {
 .slideRecipe img {
     width: 320px;
     height: 320px;
-
 }
 
 footer {
@@ -390,6 +408,122 @@ input, textarea {
 input::placeholder, textarea::placeholder {
     color: #aaa;
 }
+
+.recipe-info {
+    color: #556b2f;
+    font-family: "Arial Black";
+    margin-left: 230px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.ingredients {
+    font-family: "Arial Black";
+    margin-left: 230px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+#ingredient-list {
+    display: grid;
+    grid-template-columns: repeat(2, 2fr);
+    justify-content: left;
+}
+
+.ingredient-card {
+    border: 1px solid #98fb98;
+    border-radius: 2px;
+    padding: 10px;
+    margin: 3px;
+    text-align: left;
+    background-color: #e0f7e0;
+    box-shadow: 0 2px 4px rgba(0, 128, 0, 0.2);
+    transition: transform 0.2s;
+}
+
+.explanationAndSubstitute {
+    font-family: "Arial Black";
+    margin: 3px;
+    font-size: 10px;
+    padding: 10px;
+    display: none;
+}
+.ingredient-card:hover .explanationAndSubstitute{
+    transform: scale(1.05);
+    display: block;
+}
+.ingredient {
+    margin-top: 8px;
+    color: #556b2f;
+    font-size: 12px;
+}
+
+
+
+#equipment-list {
+    display: grid;
+    grid-template-columns: repeat(2, 2fr);
+    justify-content: left;
+}
+
+.equipment-card {
+    border: 1px solid #98fb98;
+    border-radius: 2px;
+    padding: 10px;
+    margin-left: 230px;
+    text-align: left;
+    background-color: #e0f7e0;
+    box-shadow: 0 2px 4px rgba(0, 128, 0, 0.2);
+    transition: transform 0.2s;
+}
+
+.equipment {
+    margin-top: 8px;
+    color: #556b2f;
+    font-size: 12px;
+    font-family: "Arial Black";
+}
+
+.instructions {
+    font-family: "Arial Black";
+    margin-left: 230px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+#instruction-list {
+    display: grid;
+    grid-template-columns: repeat(2, 2fr);
+    justify-content: left;
+}
+.instruction-card {
+    border: 1px solid #98fb98;
+    border-radius: 2px;
+    padding: 10px;
+    margin: 3px;
+    text-align: left;
+    background-color: #e0f7e0;
+    box-shadow: 0 2px 4px rgba(0, 128, 0, 0.2);
+    transition: transform 0.2s;
+}
+
+.term {
+    font-family: "Arial Black";
+    margin: 3px;
+    font-size: 10px;
+    padding: 10px;
+    display: none;
+}
+.instruction-card:hover .term{
+    transform: scale(1.05);
+    display: block;
+}
+.step {
+    margin-top: 8px;
+    color: #556b2f;
+    font-size: 12px;
+}
+
 
 .createdRecipeContainer {
     margin-left: 210px;
