@@ -4,9 +4,6 @@ const loadEnvFile = require('./utils/envUtil');
 const envVariables = loadEnvFile('./.env');
 
 const fs = require('fs');
-//const { Buffer } = require('buffer');
-
-
 
 // Database configuration setup. Ensure your .env file has the required database credentials.
 const dbConfig = {
@@ -80,6 +77,14 @@ async function testOracleConnection() {
     });
 }
 
+async function fetchDemotableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM DEMOTABLE');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
 
 //SQL Statements to create and insert initial values for all tables
 async function initiateAlltables() {
@@ -89,7 +94,7 @@ async function initiateAlltables() {
         for (const s of statements) {
             try {
                 await connection.execute(s);
-            } catch(err) {
+            } catch (err) {
                 console.log(s);
                 console.error(err);
             }
@@ -108,6 +113,21 @@ async function fetchRecipesFromDb() {
         return [];
     });
 }
+
+async function fetchRecipesFromDbById(id) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT *
+            FROM RECIPECREATESSORTEDBY
+            WHERE RecipeID = :id`,
+            [id]
+        );
+        return result.rows[0];
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function checkLoginStatus() {
     try {
         const response = await fetch('/checkLoginStatus');
@@ -136,7 +156,6 @@ async function fetchRecipesWithAvgRating() {
 }
 
 
-
 async function fetchRatingsFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM Rating');
@@ -146,18 +165,93 @@ async function fetchRatingsFromDb() {
     });
 }
 
-async function saveRecipe(recipeId, username) {
-    return await withOracleDB(async (connection) => {
-        const result = await connection.execute('INSERT INTO Saves (RecipeID, Username) VALUES (:recipeId, :username)',
-            [recipeId, username],
-            {autoCommit: true});
 
+async function initiateDemotable() {
+    return await withOracleDB(async (connection) => {
+        try {
+            await connection.execute(`DROP TABLE DEMOTABLE`);
+        } catch (err) {
+            console.log('Table might not exist, proceeding to create...');
+        }
+
+        const result = await connection.execute(`
+            CREATE TABLE DEMOTABLE (
+                id NUMBER PRIMARY KEY,
+                name VARCHAR2(20)
+            )
+        `);
+        return true;
     }).catch(() => {
         return false;
-    })
+    });
 }
 
+async function insertDemotable(id, name) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `INSERT INTO DEMOTABLE (id, name) VALUES (:id, :name)`,
+            [id, name],
+            {autoCommit: true}
+        );
 
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
+async function updateNameDemotable(oldName, newName) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `UPDATE DEMOTABLE SET name=:newName where name=:oldName`,
+            [newName, oldName],
+            {autoCommit: true}
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
+async function countDemotable() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT Count(*) FROM DEMOTABLE');
+        return result.rows[0][0];
+    }).catch(() => {
+        return -1;
+    });
+}
+
+async function saveRecipe(recipeId, username) {
+    const connection = await oracleDB.getConnection();
+    await connection.execute(
+        'INSERT INTO Saves (RecipeID, Username) VALUES (:recipeId, :username)',
+        [recipeId, username],
+        {autoCommit: true}
+    );
+    await connection.close();
+}
+
+// async function loginUser(username,password){
+//         return await withOracleDB(async (connection) => {
+//             const result = await connection.execute(`
+//             SELECT u.Username,u.Password
+//             FROM UserDetails u
+//             WHERE u.Username = :username AND u.Password = :password;
+//         `,[username,password]);
+//             if (result.rows.length >0) {
+//              console.log('Login Successful!');
+//                 return result.rowsAffected && result.rowsAffected > 0;
+//             } else {
+//             console.log('Username does not exist');
+//                 return result.rowsAffected && result.rowsAffected > 0;
+//             }
+//             // return result.rows;
+//     }).catch(() => {
+//         return false;
+//     });
+// }
 
 async function loginUser(username, password) {
     return await withOracleDB(async (connection) => {
@@ -214,9 +308,9 @@ async function getUserDetails(username) {
     }
 }
 
-async function signupUser(city,provinceState,username, password,phoneNo,email,name) {
+async function signupUser(city, provinceState, username, password, phoneNo, email, name) {
     return await withOracleDB(async (connection) => {
-        const userstate = await connection.execute  (`
+        const userstate = await connection.execute(`
          SELECT u.Username FROM UserDetails u
          where u.Username = :username`,
             [username]);
@@ -226,7 +320,7 @@ async function signupUser(city,provinceState,username, password,phoneNo,email,na
             return false;
         }
 
-        const emailstate = await connection.execute  (`
+        const emailstate = await connection.execute(`
          SELECT u.Username FROM UserDetails u
          where u.Email = :email`,
             [email]);
@@ -235,7 +329,7 @@ async function signupUser(city,provinceState,username, password,phoneNo,email,na
             return false;
         }
 
-        const phonestate = await connection.execute  (`
+        const phonestate = await connection.execute(`
          SELECT u.Username FROM UserDetails u
          where u.PhoneNo = :phoneNo`,
             [phoneNo]);
@@ -246,17 +340,16 @@ async function signupUser(city,provinceState,username, password,phoneNo,email,na
         const result1 = await connection.execute(
             `INSERT INTO UserLocation (PhoneNo, ProvinceState, City) 
             VALUES (:phoneNo, :provinceState, :city) `,
-            [phoneNo,provinceState,city],{autoCommit: true});
+            [phoneNo, provinceState, city], {autocommit: true});
 
 
         const result2 = await connection.execute(
             `INSERT INTO USERDETAILS (Username,Password, PhoneNo, Email, Name) 
             VALUES (:username,:password,:phoneNo, :email,:name) `,
-                [username,password,phoneNo,email,name],
-                {autoCommit: true}
-
-            );
-            return result1.rowsAffected > 0 && result2.rowsAffected > 0;
+            [username, password, phoneNo, email, name],
+            {autoCommit: true}
+        );
+        return result1.rowsAffected > 0 && result2.rowsAffected > 0;
 
     }).catch(() => {
         return false;
@@ -294,148 +387,38 @@ async function getSavedRecipes(username) {
     }
 }
 
-
-async function getCreatedRecipes(username) {
-    let connection;
-    try {
-        connection = await oracledb.getConnection(dbConfig);
-        const result = await connection.execute(
-            `SELECT r.RecipeID, r.Title, r.RecipeDescription, AVG(rt.Rating) AS AvgRating
-            FROM RecipeCreatesSortedBy r
-            LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
-            LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
-            WHERE r.Username = :username
-            GROUP BY r.RecipeID, r.Title, r.RecipeDescription
-            `,
-            [username],
-        );
-        return result.rows;
-    } catch (err) {
-        console.error('Error fetching your recipes:', err);
-        throw err;
-    } finally {
-        if (connection) {
-            try {
-                await connection.close();
-            } catch (err) {
-                console.error('Error closing connection:', err);
-            }
-        }
-    }
-}
-
-
-async function deleteAcount(phoneNo) {
-    let connection;
-    try {
-        console.log('in try appservice');
-        connection = await oracledb.getConnection(dbConfig);
-        const result = await connection.execute(
-            `DELETE FROM UserLocation WHERE PhoneNo = :phoneNo`,
-            [phoneNo],
-            {autoCommit:true}
-        );
-        console.log('almost done try appservice');
-        return result.rowsAffected > 0 && result.rowsAffected > 0;
-    } catch (err) {
-        console.error('Error!', err);
-        throw err;
-    } finally {
-        if (connection) {
-            try {
-                await connection.close();
-            } catch (err) {
-                console.error('Error closing connection', err);
-            }
-        }
-    }
-}
-
-async function getFilteredRecipes(filters) {
-    console.log(filters);
-    let sqlCode = `
-        SELECT r.RecipeID, r.Title, r.RecipeDescription, AVG(rt.Rating) as AvgRating
-        FROM RECIPECREATESSORTEDBY r
-        LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
-        LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
-    `;
-
-    let conditions = [];
-    let ratingCondition = '';
-
-    filters.forEach((filter, index) => {
-        const { option, rating, andOr } = filter;
-        let currentCondition = '';
-        let currentConditionRating = '';
-
-        if (option) {
-            currentCondition = `r.DescriptorName = '${option}'`;
-        }
-
-        if (currentCondition) {
-            if (index > 0 && andOr) {
-                conditions.push(`${andOr} ${currentCondition}`);
-            } else {
-                conditions.push(currentCondition);
-            }
-        }
-
-        if (rating) {
-            currentConditionRating = `AVG(rt.Rating) >= ${rating}`;
-        }
-
-        if (currentConditionRating) {
-            ratingCondition = `HAVING ${currentConditionRating}`;
-        }
-    });
-
-    console.log( conditions);
-    console.log(ratingCondition);
-
-    if(conditions.length > 0) {
-        sqlCode += ' '  + 'WHERE ' + conditions.join(' ')+ ' ' +
-            'GROUP BY r.RecipeID, r.Title, r.RecipeDescription ' + ratingCondition;
-    } else {
-        sqlCode +=' ' + 'GROUP BY r.RecipeID, r.Title, r.RecipeDescription '
-            +  ratingCondition;
-    }
-
-    console.log(sqlCode);
+async function getInstruction(recipeID) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(sqlCode);
+        const result = await connection.execute(`
+            SELECT i.StepNumber, i.Instruction, t.Term, t.Definition
+            FROM InstructionStep i
+            LEFT JOIN Elaborates e ON i.RecipeID = e.RecipeID AND i.StepNumber = e.StepNumber
+            LEFT JOIN Terminology t ON e.Term = t.Term
+            WHERE i.RecipeID = :recipeID
+        `,
+            [recipeID]);
         return result.rows;
-    }).catch(() => {
+    }).catch((err) => {
+        console.error(err);
         return [];
     });
 }
 
-async function findTopUser() {
+async function getRequiredItems(recipeID) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(
-            `SELECT r.Username FROM RECIPECREATESSORTEDBY r 
-            LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
-            LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
-            GROUP BY r.Username
-            HAVING AVG(rt.Rating) >= ALL (SELECT AVG(rt2.Rating)
-                                                 FROM RATING rt2
-                                                 LEFT JOIN FeedbackRespondsWithEngagesWith f on f.FeedbackID = rt2.FeedbackID
-                                                 LEFT JOIN RecipeCreatesSortedBy r2 on r2.RecipeID = f.RecipeID
-                                                 GROUP BY r2.Username) `);
-        if (result.rows.length > 0) {
-
-            console.log(result.rows);
-
-            let usernames = [];
-            for (let i = 0; i < result.rows.length; i++) {
-                usernames.push(result.rows[i]);
-            }
-            console.log(usernames);
-            return usernames;
-        } else {
-            return []
-        }
+        const result = await connection.execute(`
+            SELECT ri.ItemName, ri.ItemDescription, u.Quantity, u.Unit, s1.SubstituteName
+            FROM RequiredItems ri
+            LEFT JOIN Uses u ON ri.ItemName = u.ItemName
+            LEFT JOIN Substitutes s1 ON ri.ItemName = s1.IngredientName
+            LEFT JOIN Substitutes s2 ON ri.ItemName = s2.SubstituteName AND s1.IngredientName <> s2.SubstituteName
+            WHERE u.RecipeID = :recipeID
+            ORDER BY ri.ItemName, s1.SubstituteName
+        `,
+            [recipeID]);
+        return result.rows;
     }).catch((err) => {
-        console.error('Error fetching top user:', err);
+        console.error(err);
         return [];
     });
 }
@@ -445,7 +428,13 @@ module.exports = {
     testOracleConnection,
     initiateAlltables,
     fetchRecipesFromDb,
+    fetchRecipesFromDbById,
     fetchRatingsFromDb,
+    fetchDemotableFromDb,
+    initiateDemotable,
+    insertDemotable,
+    updateNameDemotable,
+    countDemotable,
     fetchRecipesWithAvgRating,
     checkLoginStatus,
     saveRecipe,
@@ -453,9 +442,6 @@ module.exports = {
     signupUser,
     getUserDetails,
     getSavedRecipes,
-    getCreatedRecipes,
-    deleteAcount,
-    getFilteredRecipes,
-    findTopUser
-
+    getRequiredItems,
+    getInstruction
 };
