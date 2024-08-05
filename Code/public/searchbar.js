@@ -32,8 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ratingOptgroup.label = 'ratings';
         ratingOptgroup.className = 'ratings';
         ratingOptgroup.append(new Option('4+', '4'));
-        ratingOptgroup.append(new Option('3+', '3'));
-        ratingOptgroup.append(new Option('2+', '2'));
         options.appendChild(ratingOptgroup);
 
         filterBar.appendChild(options);

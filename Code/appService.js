@@ -360,20 +360,25 @@ async function getFilteredRecipes(filters) {
         FROM RECIPECREATESSORTEDBY r
         LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
         LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
-         WHERE `;
+         `;
     let condition = [];
+    condition.push('')
+    let ratingCondition = [];
 
-    console.log('filters in as ', filters)
+    console.log('filters in as 99', filters)
 
     filters.forEach(filter => {
         const { option, optionType, andOr } = filter;
         let currentCondition = '';
+        let currentConditionRating = '';
         if (optionType === 'descriptor') {
             currentCondition = `r.DescriptorName = '${option}'`;
             console.log(currentCondition);
         } else if (optionType === 'rating') {
-            currentCondition = `rt.Rating >= ${option}`;
+            currentConditionRating = `HAVING AVG(rt.Rating) >= ${option}`;
             console.log(currentCondition);
+            ratingCondition.push(currentConditionRating);
+            console.log(currentConditionRating);
         }
 
         if (andOr !== '') {
@@ -388,7 +393,13 @@ async function getFilteredRecipes(filters) {
     console.log('confirm');
     console.log(condition);
 
-    sqlCode = sqlCode + ' ' + condition.join(' ') + ' ' + 'GROUP BY r.RecipeID, r.Title, r.RecipeDescription';
+    if (condition.length >0) {
+        sqlCode = sqlCode + ' ' + condition.join(' ') + ' ' + 'GROUP BY r.RecipeID, r.Title, r.RecipeDescription'
+            + ' ' + ratingCondition.join(' ');
+    } else {
+        sqlCode = sqlCode  + ' ' + 'GROUP BY r.RecipeID, r.Title, r.RecipeDescription'
+            + ratingCondition.join(' ');
+    }
     console.log(sqlCode);
     console.log('confirm');
 
