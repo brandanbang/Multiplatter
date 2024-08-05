@@ -94,7 +94,7 @@ async function initiateAlltables() {
         for (const s of statements) {
             try {
                 await connection.execute(s);
-            } catch(err) {
+            } catch (err) {
                 console.log(s);
                 console.error(err);
             }
@@ -154,7 +154,6 @@ async function fetchRecipesWithAvgRating() {
         return [];
     });
 }
-
 
 
 async function fetchRatingsFromDb() {
@@ -229,7 +228,7 @@ async function saveRecipe(recipeId, username) {
     await connection.execute(
         'INSERT INTO Saves (RecipeID, Username) VALUES (:recipeId, :username)',
         [recipeId, username],
-        { autoCommit: true }
+        {autoCommit: true}
     );
     await connection.close();
 }
@@ -309,9 +308,9 @@ async function getUserDetails(username) {
     }
 }
 
-async function signupUser(city,provinceState,username, password,phoneNo,email,name) {
+async function signupUser(city, provinceState, username, password, phoneNo, email, name) {
     return await withOracleDB(async (connection) => {
-        const userstate = await connection.execute  (`
+        const userstate = await connection.execute(`
          SELECT u.Username FROM UserDetails u
          where u.Username = :username`,
             [username]);
@@ -321,7 +320,7 @@ async function signupUser(city,provinceState,username, password,phoneNo,email,na
             return false;
         }
 
-        const emailstate = await connection.execute  (`
+        const emailstate = await connection.execute(`
          SELECT u.Username FROM UserDetails u
          where u.Email = :email`,
             [email]);
@@ -330,7 +329,7 @@ async function signupUser(city,provinceState,username, password,phoneNo,email,na
             return false;
         }
 
-        const phonestate = await connection.execute  (`
+        const phonestate = await connection.execute(`
          SELECT u.Username FROM UserDetails u
          where u.PhoneNo = :phoneNo`,
             [phoneNo]);
@@ -341,15 +340,14 @@ async function signupUser(city,provinceState,username, password,phoneNo,email,na
         const result1 = await connection.execute(
             `INSERT INTO UserLocation (PhoneNo, ProvinceState, City) 
             VALUES (:phoneNo, :provinceState, :city) `,
-            [phoneNo,provinceState,city],{autocommit: true});
+            [phoneNo, provinceState, city], {autocommit: true});
 
 
         const result2 = await connection.execute(
             `INSERT INTO USERDETAILS (Username,Password, PhoneNo, Email, Name) 
             VALUES (:username,:password,:phoneNo, :email,:name) `,
-            [username,password,phoneNo,email,name],
+            [username, password, phoneNo, email, name],
             {autoCommit: true}
-
         );
         return result1.rowsAffected > 0 && result2.rowsAffected > 0;
 
@@ -389,6 +387,42 @@ async function getSavedRecipes(username) {
     }
 }
 
+async function getInstruction(recipeID) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT i.StepNumber, i.Instruction, t.Term, t.Definition
+            FROM InstructionStep i
+            LEFT JOIN Elaborates e ON i.RecipeID = e.RecipeID AND i.StepNumber = e.StepNumber
+            LEFT JOIN Terminology t ON e.Term = t.Term
+            WHERE i.RecipeID = :recipeID
+        `,
+            [recipeID]);
+        return result.rows;
+    }).catch((err) => {
+        console.error(err);
+        return [];
+    });
+}
+
+async function getRequiredItems(recipeID) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT ri.ItemName, ri.ItemDescription, u.Quantity, u.Unit, s1.SubstituteName
+            FROM RequiredItems ri
+            LEFT JOIN Uses u ON ri.ItemName = u.ItemName
+            LEFT JOIN Substitutes s1 ON ri.ItemName = s1.IngredientName
+            LEFT JOIN Substitutes s2 ON ri.ItemName = s2.SubstituteName AND s1.IngredientName <> s2.SubstituteName
+            WHERE u.RecipeID = :recipeID
+            ORDER BY ri.ItemName, s1.SubstituteName
+        `,
+            [recipeID]);
+        return result.rows;
+    }).catch((err) => {
+        console.error(err);
+        return [];
+    });
+}
+
 
 module.exports = {
     testOracleConnection,
@@ -407,5 +441,7 @@ module.exports = {
     loginUser,
     signupUser,
     getUserDetails,
-    getSavedRecipes
+    getSavedRecipes,
+    getRequiredItems,
+    getInstruction
 };

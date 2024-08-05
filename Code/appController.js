@@ -123,14 +123,44 @@ router.post('/saveRecipe', async (req, res) => {
 router.get('/api/recipe/:id(\\d+)', async (req, res) => {
     try {
         const id = parseInt(req.params.id);
-        const data = await appService.fetchRecipesFromDbById(id);
+        const recipe = await appService.fetchRecipesFromDbById(id);
 
-        if (data) {
-            // const routePath = path.join(__dirname, '/public/somerecipe.html');
-            // console.log(routePath);
+        console.log(recipe);
 
-            // res.sendFile(routePath);
-            res.json(data);
+        if (recipe) {
+            res.json(recipe);
+        } else {
+            res.status(404).json({error: 'Data not found'});
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: 'Error fetching data'});
+    }
+});
+
+router.get('/requiredItems/:id(\\d+)', async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const ingredients = await appService.getRequiredItems(id);
+
+        if (ingredients) {
+            res.json(ingredients);
+        } else {
+            res.status(404).json({error: 'Data not found'});
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: 'Error fetching data'});
+    }
+});
+
+router.get('/instructions/:id(\\d+)', async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const instructions = await appService.getInstruction(id);
+
+        if (instructions) {
+            res.json(instructions);
         } else {
             res.status(404).json({error: 'Data not found'});
         }

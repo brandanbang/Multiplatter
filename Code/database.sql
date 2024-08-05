@@ -161,7 +161,7 @@ CREATE TABLE Uses
 (
     RecipeID INTEGER,
     ItemName VARCHAR(50),
-    Quantity DECIMAL NOT NULL,
+    Quantity FLOAT NOT NULL,
     Unit VARCHAR(15),
     PRIMARY KEY (RecipeID, ItemName),
     FOREIGN KEY (RecipeID) REFERENCES RecipeCreatesSortedBy(RecipeID) ON DELETE CASCADE,
@@ -186,11 +186,11 @@ CREATE TABLE ClassifiesBy
 );
 
 CREATE TABLE Saves (
-   RecipeID INTEGER,
-   Username VARCHAR(60),
-   PRIMARY KEY (RecipeID, Username),
-   FOREIGN KEY (RecipeID) REFERENCES RecipeCreatesSortedBy(RecipeID) ON DELETE CASCADE,
-   FOREIGN KEY (Username) REFERENCES UserDetails(Username) ON DELETE CASCADE
+                       RecipeID INTEGER,
+                       Username VARCHAR(60),
+                       PRIMARY KEY (RecipeID, Username),
+                       FOREIGN KEY (RecipeID) REFERENCES RecipeCreatesSortedBy(RecipeID) ON DELETE CASCADE,
+                       FOREIGN KEY (Username) REFERENCES UserDetails(Username) ON DELETE CASCADE
 );
 
 
@@ -232,6 +232,8 @@ INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Boil the pasta to a
 INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Blanch the spinach.', 5);
 INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Toast the bread.', 3);
 INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Mix pasta with prepared sauce.', 1);
+INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Juice and zest the lemon.', 2);
+
 -- Inserting values into InstructionStep
 INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (101, 'Preheat the oven to 350 degrees F.', 1);
 INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (101, 'Mix flour and sugar in a bowl.', 2);
@@ -241,6 +243,8 @@ INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (103, 'Bo
 INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (103, 'Mix pasta with prepared sauce.', 2);
 INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (104, 'Blanch the spinach.', 1);
 INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (106, 'Toast the bread.', 1);
+INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (105, 'Juice and zest the lemon.', 1);
+
 -- Inserting values into GroceryStoresArea
 INSERT INTO GroceryStoresArea (PostalCode, City, ProvinceState) VALUES ('V5K0A1', 'Vancouver', 'British Columbia');
 INSERT INTO GroceryStoresArea (PostalCode, City, ProvinceState) VALUES ('M5V2T6', 'Toronto', 'Ontario');
@@ -321,6 +325,8 @@ INSERT INTO Uses (RecipeID, ItemName, Quantity, Unit) VALUES (103, 'Eggs', 0.5, 
 INSERT INTO Uses (RecipeID, ItemName, Quantity, Unit) VALUES (104, 'Flour', 400, 'grams');
 INSERT INTO Uses (RecipeID, ItemName, Quantity, Unit) VALUES (106, 'Eggs', 1, 'unit');
 INSERT INTO Uses (RecipeID, ItemName, Quantity, Unit) VALUES (101, 'Sugar', 0.2, 'kg');
+INSERT INTO Uses (RecipeID, ItemName, Quantity, Unit) VALUES (105, 'Lemon', 1, 'large');
+
 -- Inserting values into SoldByCurrency
 INSERT INTO SoldByCurrency (PostalCode, Currency) VALUES ('V5K0A1', 'CAD');
 INSERT INTO SoldByCurrency (PostalCode, Currency) VALUES ('M5V2T6', 'CAD');
