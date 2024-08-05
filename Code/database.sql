@@ -132,7 +132,7 @@ CREATE TABLE CommentsRepliesTo
     Content VARCHAR(300) NOT NULL,
     ParentID INTEGER,
     FOREIGN KEY (FeedbackID) REFERENCES FeedbackRespondsWithEngagesWith(FeedbackID) ON DELETE CASCADE,
-    FOREIGN KEY (ParentID) REFERENCES CommentsRepliesTo(FeedbackID)
+    FOREIGN KEY (ParentID) REFERENCES CommentsRepliesTo(FeedbackID) ON DELETE CASCADE
 );
 CREATE TABLE Rating
 (

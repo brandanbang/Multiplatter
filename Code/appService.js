@@ -157,17 +157,6 @@ async function saveRecipe(recipeId, username) {
     })
 }
 
-// async function removeSave(recipeId, username) {
-//     return await withOracleDB(async (connection) => {
-//         const result = await connection.execute('' +
-//             'INSERT INTO Saves (RecipeID, Username) VALUES (:recipeId, :username)',
-//             [recipeId, username],
-//             { autoCommit: true });
-//
-//     }).catch(() =>{
-//         return false;
-//     })
-
 
 
 async function loginUser(username, password) {
@@ -335,44 +324,18 @@ async function getCreatedRecipes(username) {
     }
 }
 
-// async function filter(descriptor,rating) {
-//     let connection;
-//     try {
-//         connection = await oracledb.getConnection(dbConfig);
-//         const result = await connection.execute(
-//             `SELECT r.RecipeID, r.Title, r.RecipeDescription, AVG(rt.Rating) AS AvgRating
-//             FROM RecipeCreatesSortedBy r
-//             LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
-//             LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
-//             WHERE r.Username = :username
-//             GROUP BY r.RecipeID, r.Title, r.RecipeDescription
-//             `,
-//             [username],
-//         );
-//         return result.rows;
-//     } catch (err) {
-//         console.error('Error fetching your recipes:', err);
-//         throw err;
-//     } finally {
-//         if (connection) {
-//             try {
-//                 await connection.close();
-//             } catch (err) {
-//                 console.error('Error closing connection:', err);
-//             }
-//         }
-//     }
-// }
 
 async function deleteAcount(phoneNo) {
     let connection;
     try {
+        console.log('in try appservice');
         connection = await oracledb.getConnection(dbConfig);
         const result = await connection.execute(
             `DELETE FROM UserLocation WHERE PhoneNo = :phoneNo`,
             [phoneNo],
             {autoCommit:true}
         );
+        console.log('almost done try appservice');
         return result.rowsAffected > 0 && result.rowsAffected > 0;
     } catch (err) {
         console.error('Error!', err);
@@ -389,6 +352,62 @@ async function deleteAcount(phoneNo) {
 }
 
 
+async function getFilteredRecipes(filters) {
+    console.log(filters);
+    let sqlCode = `
+        SELECT r.RecipeID, r.Title, r.RecipeDescription, AVG(rt.Rating) as AvgRating
+        FROM RECIPECREATESSORTEDBY r
+        LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
+        LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
+         WHERE `;
+    let condition = '';
+
+    console.log('filters in as', filters)
+
+    filters.forEach(filter => {
+        const { option, optionType, andOr } = filter;
+        let currentCondition = '';
+        if (optionType === 'descriptor') {
+            currentCondition = `r.DescriptorName = :option`;
+            console.log(currentCondition);
+        } else if (optionType === 'rating') {
+            currentCondition = `rt.Rating >= :option`;
+            console.log(currentCondition);
+        }
+
+        if (andOr !== '') {
+                console.log('and/or is');
+                condition.concat(' ');
+                condition.concat(`:andOr ${currentCondition}`);
+        } else {
+                condition.concat(' ');
+                condition.concat(`${currentCondition}`);
+            }
+    });
+    console.log(condition);
+
+    sqlCode = sqlCode + ' ' + condition + ' ' + 'GROUP BY r.RecipeID, r.Title, r.RecipeDescription';
+    console.log(sqlCode);
+let connection;
+    try {
+        connection = await oracledb.getConnection(dbConfig);
+        const result = await connection.execute(sqlCode);
+        console.log(result)
+        return result.rows;
+    } catch (err) {
+        console.error('Database query error:', err);
+        throw err;
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                console.error('Error closing connection:', err);
+            }
+        }
+    }
+}
+
 module.exports = {
     testOracleConnection,
     initiateAlltables,
@@ -402,7 +421,7 @@ module.exports = {
     getUserDetails,
     getSavedRecipes,
     getCreatedRecipes,
-    // removeSave
-    deleteAcount
+    deleteAcount,
+    getFilteredRecipes
 
 };

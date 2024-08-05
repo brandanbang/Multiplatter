@@ -69,20 +69,6 @@ router.post('/saveRecipe', async (req, res) => {
     }
 });
 
-// router.post('/removeSaves', async (req, res) => {
-//     // const username = localStorage.getItem('username');
-//     // if (!username) {
-//     //     return res.status(401).json({ error: 'Unauthorized' });
-//     // }
-//     const { recipeId, username } = req.body;
-//     //const username = req.session.user.username;
-//     const removeResult = await appService.removeSave(recipeId, username);
-//     if (removeResult) {
-//         res.json({ success: true });
-//     } else {
-//         res.json({ success: false });
-//     }
-// });
 
 router.post("/logintable", async (req, res) => {
     const { Username, Password } = req.body;
@@ -144,10 +130,10 @@ router.get('/api/user/:username/created-recipes', async (req, res) => {
     }
 });
 
-router.post("/api/user/deleteAccount", async (req, res) => {
+router.post('/api/user/deleteAccount', async (req, res) => {
     try {
         const {PhoneNo} = req.body;
-        const deleteResult = await appService.deleteAcount( PhoneNo);
+        const deleteResult = await appService.deleteAcount(PhoneNo);
         if (deleteResult) {
             res.json({success: true});
 
@@ -160,6 +146,14 @@ router.post("/api/user/deleteAccount", async (req, res) => {
     }
 });
 
-
-
+router.post('/filteredRecipes', async (req, res) => {
+    const filters = req.body.filters;
+    console.log(filters);
+    try {
+        const recipes = await appService.getFilteredRecipes(filters);
+        res.json({ data: recipes });
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 module.exports = router;
