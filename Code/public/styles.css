@@ -130,7 +130,7 @@ h1 {
 }
 
 #recipes-container {
-    margin-top: 200px;
+    margin-top: 20px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -321,29 +321,6 @@ footer {
     width: 100px;
     margin-right: 10px;
 }
-.filterGroup ,.filterRating ,.filter{
-    font-size: 16px;
-    height: 35px;
-    width: 100px;
-    margin-right: 15px;
-    background-color:whitesmoke ;
-    border-color:whitesmoke  ;
-    border-radius: 4px;
-    font-family: Arial;
-    margin-left: 15px;
-}
-
-/*.filter {*/
-/*    font-size: 16px;*/
-/*    height: 35px;*/
-/*    width: 100px;*/
-/*    margin-right: 15px;*/
-/*    background-color:whitesmoke ;*/
-/*    border-color:whitesmoke  ;*/
-/*    border-radius: 4px;*/
-/*    font-family: Arial;*/
-/*    margin-left: 15px;*/
-/*}*/
 
 
 /* INPUT STYLES */
@@ -419,14 +396,13 @@ input::placeholder, textarea::placeholder {
     margin-top: 130px;
 }
 .filter {
-margin-left: 210px;
-padding: 0px;
-border: 1px solid #ddd;
-border-radius: 8px;
-background-color: #fff;
-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-flex: 1;
-/*   width:500px; */
+    margin-left: 210px;
+    padding: 0px;
+    width:60%;
+    height: 30%;
+    border-radius: 8px;
+    background-color: whitesmoke;
+    overflow: scroll ;
 }
 
 
@@ -450,3 +426,8 @@ flex: 1;
     background-color: #3B4D2B;
 }
 
+#apply {
+    background-color: #3B4D2B;
+    margin-left: 10px;
+    display: flex;
+}

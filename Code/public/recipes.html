@@ -36,19 +36,29 @@
 <h1><u>RECIPES</u></h1>
 
 
-<div id="filterContainer">
-    <div class="filter" id="filter">
+
+<div class="filter" id="filter">
         <div class="filterBar" id="filterBar">
             <select class="options">
-                <option value="breakfast">breakfast</option>
-                <option value="lunch">lunch</option>
-                <option value="dinner">dinner</option>
-                <option value="dessert">dessert</option>
+                <optgroup label="descriptors" class="descriptors">
+                    <option value="breakfast">breakfast</option>
+                    <option value="lunch">lunch</option>
+                    <option value="dinner">dinner</option>
+                    <option value="dessert">dessert</option>
+                    <option value="spicy">spicy</option>
+                    <option value="quick">quick</option>
+                </optgroup>
+                <optgroup label="rating" class="ratings">
+                    <option value="4">4+</option>
+                    <option value="3">3+</option>
+                    <option value="2">2+</option>
+                </optgroup>
             </select>
             <button id="addFilterButton" >+</button>
+            <button id="apply" >GO</button>
         </div>
-    </div>
 </div>
+
 <br>
 
 <div id="recipes-container"></div>
@@ -58,9 +68,7 @@
     <div class="footerText"> Contact Info:</div>
 </footer>
 
-<!-- ===================================================================================== -->
-<!-- External JavaScript file that contains the functionality/logic for the operations above. -->
-    <script src="scripts.js"></script>
+<script src="scripts.js"></script>
 <script src="searchbar.js"></script>
 </body>
 </html>
