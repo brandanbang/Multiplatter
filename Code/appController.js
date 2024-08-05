@@ -49,54 +49,6 @@ router.post("/initiate-all-tables", async (req, res) => {
     }
 });
 
-router.get('/demotable', async (req, res) => {
-    const tableContent = await appService.fetchDemotableFromDb();
-    res.json({data: tableContent});
-});
-
-router.post("/initiate-demotable", async (req, res) => {
-    const initiateResult = await appService.initiateDemotable();
-    if (initiateResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
-
-router.post("/insert-demotable", async (req, res) => {
-    const { id, name } = req.body;
-    const insertResult = await appService.insertDemotable(id, name);
-    if (insertResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
-
-router.post("/update-name-demotable", async (req, res) => {
-    const { oldName, newName } = req.body;
-    const updateResult = await appService.updateNameDemotable(oldName, newName);
-    if (updateResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
-
-router.get('/count-demotable', async (req, res) => {
-    const tableCount = await appService.countDemotable();
-    if (tableCount >= 0) {
-        res.json({
-            success: true,
-            count: tableCount
-        });
-    } else {
-        res.status(500).json({
-            success: false,
-            count: tableCount
-        });
-    }
-});
 
 // Check login status route
 router.get('/checkLoginStatus', (req, res) => {
@@ -104,19 +56,18 @@ router.get('/checkLoginStatus', (req, res) => {
     res.json({ isLoggedIn });
 });
 
-// Save recipe route
 router.post('/saveRecipe', async (req, res) => {
-    if (!req.session || !req.session.user) {
-        return res.status(401).json({ error: 'Unauthorized' });
-    }
-    const { recipeId } = req.body;
-    const username = req.session.user.username;
-    try {
-        await saveRecipe(recipeId, username);
-        res.status(200).json({ message: 'Recipe saved successfully' });
-    } catch (error) {
-        console.error('Error saving recipe:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+    // const username = localStorage.getItem('username');
+    // if (!username) {
+    //     return res.status(401).json({ error: 'Unauthorized' });
+    // }
+    const { recipeId, username } = req.body;
+    //const username = req.session.user.username;
+    const savesResult = await appService.saveRecipe(recipeId, username);
+    if (savesResult) {
+        res.json({ success: true });
+    } else {
+        res.json({ success: false });
     }
 });
 
@@ -170,19 +121,6 @@ router.get('/instructions/:id(\\d+)', async (req, res) => {
     }
 });
 
-// router.post("/logintable", async (req, res) => {
-//     console.log("in appcontroller");
-//     const {Username,Password} = req.body;
-//     const insertResult = await appService.loginUser(Username,Password);
-//     console.log("in appcontroller again");
-//     console.log(insertResult);
-//     if (insertResult.success) {
-//         res.json({ success: true });
-//     } else {
-//         // res.status(500).json({ success: false });
-//         res.json({success: false});
-//     }
-// });
 router.post("/logintable", async (req, res) => {
     const { Username, Password } = req.body;
     const loginResult = await appService.loginUser(Username, Password);
@@ -217,7 +155,7 @@ router.post("/signup", async (req, res) => {
         }
 
     } catch (err) {
-        res.status(500).json({error: 'Internal Server Errors'});
+        res.status(500).json({error: 'Failed to Sign up!'});
     }
 });
 
@@ -233,5 +171,52 @@ router.get('/api/user/:username/saved-recipes', async (req, res) => {
 
 
 
+router.get('/api/user/:username/created-recipes', async (req, res) => {
+    try {
+        const username = req.params.username;
+        const recipes = await appService.getCreatedRecipes(username);
+        res.json({ data: recipes });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch created recipes' });
+    }
+});
+
+router.post('/api/user/deleteAccount', async (req, res) => {
+    try {
+        const {PhoneNo} = req.body;
+        const deleteResult = await appService.deleteAcount(PhoneNo);
+        if (deleteResult) {
+            res.json({success: true});
+
+        } else {
+            res.json({success: false});
+        }
+
+    } catch (err) {
+        res.status(500).json({error: 'failed to delete account'});
+    }
+});
+
+router.post('/filteredRecipes', async (req, res) => {
+    const filters = req.body.filters;
+    console.log(filters);
+    try {
+        const recipes = await appService.getFilteredRecipes(filters);
+        res.json({ data: recipes });
+    } catch (error) {
+        res.status(500).json({ error: 'could not filter '});
+    }
+});
+
+router.get('/topUser', async (req, res) => {
+    try {
+        const tableContent = await appService.findTopUser();
+        console.log( tableContent);
+        res.json({ data: tableContent });
+    } catch (err) {
+        console.error('Error getting user', err);
+        res.status(500).json({ error: 'no top user yet!' });
+    }
+});
 
 module.exports = router;

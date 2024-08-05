@@ -100,14 +100,16 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: calc(100% - 220px); /* Adjust for sidebar width */
-    margin-top: 100px; /* Adjust for header height */
-    margin-left: 210px; /* Adjust for sidebar width */
+    width: 80%;
+    margin-top: 100px;
+    margin-left: 210px;
+    margin-right:10px;
     padding: 100px;
     border: 2px solid darkgreen;
     border-radius: 10px;
-    background-color: #f9f9f9;
+    background-color: #D9FBBB;;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: Georgia;
 }
 
 #profileContainer p {
@@ -127,4 +129,30 @@ footer {
 .footerText {
     color: darkgrey;
     font-size: 15px;
+}
+.profilelink {
+    padding: 10px;
+    background-color: #3B4D2B;
+    color: whitesmoke;
+    border-radius: 3px;
+    margin-bottom: 5px;
+    font-family: Georgia;
+    text-decoration: none;
+}
+
+#deleteAccountContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    margin-top: 100px;
+    margin-left: 210px;
+    margin-right:10px;
+    padding: 100px;
+    border: 2px solid darkgreen;
+    border-radius: 10px;
+    background-color: #D9FBBB;;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: Georgia;
 }
