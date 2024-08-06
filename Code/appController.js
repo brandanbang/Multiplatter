@@ -121,6 +121,39 @@ router.get('/instructions/:id(\\d+)', async (req, res) => {
     }
 });
 
+router.get('/tags/:id(\\d+)', async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const tags = await appService.getTags(id);
+
+        if (tags) {
+            res.json(tags);
+        } else {
+            res.status(404).json({error: 'Data not found'});
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: 'Error fetching data'});
+    }
+});
+
+router.get('/comments/:id(\\d+)', async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const comments = await appService.getComments(id);
+
+        if (comments) {
+            res.json(comments);
+        } else {
+            res.status(404).json({error: 'Data not found'});
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: 'Error fetching data'});
+    }
+});
+
+
 router.post("/logintable", async (req, res) => {
     const { Username, Password } = req.body;
     const loginResult = await appService.loginUser(Username, Password);
@@ -205,6 +238,33 @@ router.post('/filteredRecipes', async (req, res) => {
         res.json({ data: recipes });
     } catch (error) {
         res.status(500).json({ error: 'could not filter '});
+    }
+});
+
+router.get('/getUsedRecipeID', async (req, res) => {
+    try {
+        const tableContent = await appService.getUsedRecipeID();
+        console.log( tableContent);
+        res.json(tableContent);
+    } catch (err) {
+        console.error('Error getting user', err);
+        res.status(500).json({ error: 'no top user yet!' });
+    }
+});
+
+router.post("/createRecipe", async (req, res) => {
+    try {
+        const {Title, Picture, RecipeDescription, RecipeID, Username, DescriptorName} = req.body;
+        const result = await appService.createRecipe(Title, Picture, RecipeDescription, RecipeID, Username, DescriptorName);
+        if (result) {
+            res.json({success: true});
+
+        } else {
+            res.json({success: false});
+        }
+
+    } catch (err) {
+        res.status(500).json({error: 'Failed to create Recipe!'});
     }
 });
 

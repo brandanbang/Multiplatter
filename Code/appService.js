@@ -119,6 +119,20 @@ async function fetchRecipesFromDbById(id) {
         return [];
     });
 }
+async function getTags(id) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT d.DescriptorName, d.DescriptorDescription
+            FROM DESCRIPTORS d
+            LEFT JOIN CLASSIFIESBY cb ON d.DescriptorName = cb.DescriptorName
+            WHERE cb.RecipeID = :id`,
+            [id]
+        );
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
 
 async function checkLoginStatus() {
     try {
@@ -304,10 +318,11 @@ async function getSavedRecipes(username) {
 async function getInstruction(recipeID) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`
-            SELECT i.StepNumber, i.Instruction, t.Term, t.Definition
+            SELECT i.StepNumber, i.Instruction, t.Term, t.Definition, it.Duration
             FROM InstructionStep i
             LEFT JOIN Elaborates e ON i.RecipeID = e.RecipeID AND i.StepNumber = e.StepNumber
             LEFT JOIN Terminology t ON e.Term = t.Term
+            LEFT JOIN InstructionTime it ON it.Instruction = i.Instruction
             WHERE i.RecipeID = :recipeID
         `,
             [recipeID]);
@@ -337,6 +352,22 @@ async function getRequiredItems(recipeID) {
     });
 }
 
+async function getComments(recipeID) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT c.Content, TO_CHAR(f.DateTime, 'DD Mon YYYY') AS formattedDate, f.Username, f.FeedbackID, c.ParentID
+            FROM FeedbackRespondsWithEngagesWith f
+            LEFT JOIN CommentsRepliesTo c ON c.FeedbackID = f.FeedbackID
+            WHERE f.RecipeID = :recipeID
+            ORDER BY f.DateTime
+        `,
+            [recipeID]);
+        return result.rows;
+    }).catch((err) => {
+        console.error(err);
+        return [];
+    });
+}
 
 async function getCreatedRecipes(username) {
     let connection;
@@ -483,6 +514,45 @@ async function findTopUser() {
     });
 }
 
+async function getUsedRecipeID() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT RecipeId
+            FROM RecipeCreatesSortedBy
+        `);
+        return result.rows;
+    }).catch((err) => {
+        console.error(err);
+        return [];
+    });
+}
+
+async function createRecipe(Title, Picture, RecipeDescription, RecipeID, Username, DescriptorName) {
+    return await withOracleDB(async (connection) => {
+        const recipestate = await connection.execute(`
+         SELECT r.Title
+         FROM RecipeCreatesSortedBy r
+         where r.Title = :Title`,
+            [Title]);
+
+        if (recipestate.rows.length > 0) {
+            console.log('Recipe of the same name already exists , appservice');
+            return false;
+        }
+
+        const result = await connection.execute(
+            `INSERT INTO RecipeCreatesSortedBy (Title, Picture, RecipeDescription, RecipeID, Username, DescriptorName)
+            VALUES (:Title, :Picture, :RecipeDescription, :RecipeID, :Username, :DescriptorName) `,
+            [Title, Picture, RecipeDescription, RecipeID, Username, DescriptorName], {autocommit: true});
+
+        return result.rowsAffected > 0;
+
+    }).catch(() => {
+        return false;
+    });
+}
+
+
 async function fetchAllTablesColumns() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
@@ -544,6 +614,9 @@ module.exports = {
     getFilteredRecipes,
     findTopUser,
     fetchAllTablesColumns,
-    fetchTable
+    fetchTable,
+    getTags,
+    getComments,
+    getUsedRecipeID
 };
 
