@@ -219,4 +219,27 @@ router.get('/topUser', async (req, res) => {
     }
 });
 
+router.get('/tableColumn', async (req, res) => {
+    try {
+        const tableContent = await appService.fetchAllTablesColumns();
+        console.log( tableContent);
+        res.json({ data: tableContent });
+    } catch (err) {
+        console.error('Error getting all tables and columns', err);
+        res.status(500).json({ error: 'error!' });
+    }
+});
+//
+router.post('/fetchData', async (req, res) => {
+    const { tableName, columns } = req.body;
+    // console.log('c in ac',columns);
+    // console.log('in ac')
+    try {
+        const data = await appService.fetchTable(tableName, columns);
+        res.json({ data });
+    } catch (err) {
+        console.error('Error fetching data:', err);
+        res.status(500).json({ error: 'Error fetching data' });
+    }
+});
 module.exports = router;

@@ -483,6 +483,46 @@ async function findTopUser() {
     });
 }
 
+async function fetchAllTablesColumns() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `SELECT table_name,listagg(column_name,',')
+                          WITHIN GROUP ( ORDER BY column_id ) columns
+                          FROM user_tab_cols
+                          GROUP BY table_name`);
+        if (result.rows.length > 0) {
+            console.log(result.rows);
+            console.log(result.rows[0]);
+            console.log(result.rows[1]);
+            return result.rows;
+        } else {
+            return []
+        }
+    }).catch((err) => {
+        console.error('Error fetching top user:', err);
+        return [];
+    });
+}
+
+// Resource https://stackoverflow.com/questions/36747495/listing-all-tables-and-columns-from-my-database-oracle
+// https://docs.oracle.com/en/database/oracle/oracle-database/21/sqlrf/LISTAGG.html
+
+async function fetchTable(tableName, columns) {
+    return await withOracleDB(async (connection) => {
+        const columnNames = columns.join(', ');
+        const sql = `SELECT ${columnNames} FROM ${tableName}`;
+
+        console.log('SQL:', sql);
+        const result = await connection.execute(
+            `SELECT ${columnNames} FROM ${tableName}`);
+
+        return result.rows;
+
+    }).catch((err) => {
+        console.error('Error fetching table:', err);
+        return [];
+    });
+}
 
 module.exports = {
     testOracleConnection,
@@ -502,5 +542,8 @@ module.exports = {
     getCreatedRecipes,
     deleteAcount,
     getFilteredRecipes,
-    findTopUser
+    findTopUser,
+    fetchAllTablesColumns,
+    fetchTable
 };
+

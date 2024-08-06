@@ -594,3 +594,39 @@ input::placeholder, textarea::placeholder {
     font-size: 30px;
     /*overflow: scroll;*/
 }
+
+.searchtable {
+    margin-left: 210px;
+    margin-bottom: 20px;
+    /*height: 20px;*/
+    display: flex;
+    /*overflow: scroll;*/
+}
+
+#tableGroup {
+    height: 30px;
+}
+#applyTable {
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    height: 35px;
+    background: #3B4D2B;
+}
+
+#attributes {
+    background-color: whitesmoke;
+    margin-left: 10px;
+    display: block;
+    height: 100%;
+    /*border: solid #3B4D2B;*/
+}
+
+#tableResult {
+    margin-left: 210px;
+    display: inline-block;
+    /*text-align: center;*/
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-family: Georgia;
+}

@@ -38,99 +38,6 @@ async function checkDbConnection() {
 }
 
 
-// This function resets or initializes the demotable.
-async function resetDemotable() {
-    const response = await fetch("/initiate-demotable", {
-        method: 'POST'
-    });
-    const responseData = await response.json();
-
-    if (responseData.success) {
-        const messageElement = document.getElementById('resetResultMsg');
-        messageElement.textContent = "demotable initiated successfully!";
-        fetchTableData();
-    } else {
-        alert("Error initiating table!");
-    }
-}
-
-// Inserts new records into the demotable.
-async function insertDemotable(event) {
-    event.preventDefault();
-
-    const idValue = document.getElementById('insertId').value;
-    const nameValue = document.getElementById('insertName').value;
-
-    const response = await fetch('/insert-demotable', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            id: idValue,
-            name: nameValue
-        })
-    });
-
-    const responseData = await response.json();
-    const messageElement = document.getElementById('insertResultMsg');
-
-    if (responseData.success) {
-        messageElement.textContent = "Data inserted successfully!";
-        fetchTableData();
-    } else {
-        messageElement.textContent = "Error inserting data!";
-    }
-}
-
-// Updates names in the demotable.
-async function updateNameDemotable(event) {
-    event.preventDefault();
-
-    const oldNameValue = document.getElementById('updateOldName').value;
-    const newNameValue = document.getElementById('updateNewName').value;
-
-    const response = await fetch('/update-name-demotable', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            oldName: oldNameValue,
-            newName: newNameValue
-        })
-    });
-
-    const responseData = await response.json();
-    const messageElement = document.getElementById('updateNameResultMsg');
-
-    if (responseData.success) {
-        messageElement.textContent = "Name updated successfully!";
-        fetchTableData();
-    } else {
-        messageElement.textContent = "Error updating name!";
-    }
-}
-
-// Counts rows in the demotable.
-// Modify the function accordingly if using different aggregate functions or procedures.
-async function countDemotable() {
-    const response = await fetch("/count-demotable", {
-        method: 'GET'
-    });
-
-    const responseData = await response.json();
-    const messageElement = document.getElementById('countResultMsg');
-
-    if (responseData.success) {
-        const tupleCount = responseData.count;
-        messageElement.textContent = `The number of tuples in demotable: ${tupleCount}`;
-    } else {
-        alert("Error in count demotable!");
-    }
-}
-
-
 
 function showLoginForm() {
     document.getElementById('loginform').style.display = 'block';
@@ -168,8 +75,15 @@ async function login(event) {
     if (responseData.success) {
         messageElement.textContent = "Logged in successfully";
         localStorage.setItem('isLoggedIn', 'true');
+
         localStorage.setItem('username', usernameValue);
-        window.location.href = `/profile.html?username=${usernameValue}`;
+        if(usernameValue === 'admin') {
+            localStorage.setItem('isAdmin', 'true');
+            window.location.href = `/admin.html?username=${usernameValue}`;
+        } else {
+            localStorage.setItem('isAdmin', 'false');
+            window.location.href = `/profile.html?username=${usernameValue}`;
+        }
     } else {
         messageElement.textContent = "Either Username does not exist or password is wrong";
     }
@@ -178,6 +92,7 @@ async function login(event) {
 function logout() {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('username');
+    localStorage.removeItem('isAdmin');
     window.location.href = 'signIn.html';
 }
 
@@ -185,21 +100,33 @@ document.addEventListener('DOMContentLoaded', function() {
     const loginLink = document.getElementById('loginLink');
     const profileLink = document.getElementById('profileLink');
     const logoutLink = document.getElementById('logoutLink');
+    const adminLink = document.getElementById('adminLink');
 
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
     if (isLoggedIn) {
         loginLink.style.display = 'none';
-        profileLink.style.display = 'block';
         logoutLink.style.display = 'block';
+
         const username = localStorage.getItem('username');
-        if (username) {
-            document.getElementById('username').textContent = username;
+        // if (username) {
+        //     document.getElementById('username').textContent = username;
+        // }
+        const isAdmin = localStorage.getItem('isAdmin') === 'true';
+        console.log(isAdmin);
+
+        if(isAdmin) {
+            adminLink.style.display = 'block';
+            profileLink.style.display = 'block';
+        } else {
+            profileLink.style.display = 'block';
+            adminLink.style.display = 'none';
         }
     } else {
         loginLink.style.display = 'block';
         profileLink.style.display = 'none';
         logoutLink.style.display = 'none';
+        adminLink.style.display = 'none';
     }
 
     logoutLink.addEventListener('click', function(event) {
