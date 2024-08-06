@@ -302,4 +302,15 @@ router.post('/fetchData', async (req, res) => {
         res.status(500).json({ error: 'Error fetching data' });
     }
 });
+
+router.get('/topRecipe', async (req, res) => {
+    try {
+        const tableContent = await appService.toprecipe();
+        console.log( tableContent);
+        res.json({ data: tableContent });
+    } catch (err) {
+        console.error('Error getting recipe', err);
+        res.status(500).json({ error: 'no top recipe yet!' });
+    }
+});
 module.exports = router;

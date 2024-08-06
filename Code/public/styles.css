@@ -571,12 +571,7 @@ input::placeholder, textarea::placeholder {
     margin-left: 210px;
     width: 150px;
     height: 300px;
-    /*display: flex;*/
     text-align: center;
-    /*border-radius: 10px;*/
-    /*border: 10px solid  ;*/
-    /*border-color: #3B4D2B;*/
-    /*overflow: scroll;*/
 
 }
 
@@ -591,8 +586,97 @@ input::placeholder, textarea::placeholder {
 
 #topUserVal {
     font-family: Impact;
-    font-size: 30px;
+    font-size: 25px;
     /*overflow: scroll;*/
+}
+
+#topRecipe {
+    font-family: Impact;
+    font-size: 50px;
+}
+
+#topRecipeVal {
+    font-family: Impact;
+    font-size: 25px;
+}
+
+.topRecipe {
+    margin-left: 210px;
+    width: 150px;
+    height: 300px;
+    text-align: center;
+}
+.comments {
+    font-family: "Arial Black";
+    margin-left: 230px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+#comment-list {
+    display: grid;
+    grid-template-columns: repeat(2, 2fr);
+    justify-content: left;
+}
+
+.comment-card {
+    border: 1px solid #98fb98;
+    border-radius: 2px;
+    padding: 10px;
+    margin: 3px;
+    text-align: left;
+    background-color: #e0f7e0;
+    box-shadow: 0 2px 4px rgba(0, 128, 0, 0.2);
+    transition: transform 0.2s;
+}
+
+.commentHeading {
+    font-family: "Arial Black";
+    margin: 3px;
+    font-size: 12px;
+    padding: 2px;
+}
+
+.commentInfo {
+    font-family: "Arial Black";
+    margin: 3px;
+    font-size: 10px;
+    padding: 1px;
+}
+
+.comment {
+    font-family: "Arial Black";
+    margin: 3px;
+    font-size: 10px;
+    padding: 1px;
+}
+
+.noComments {
+    font-family: "Arial Black";
+    margin: 3px;
+    font-size: 10px;
+    padding: 10px;
+}
+
+
+#newRecipeContainer {
+    height: 500px;
+    width: 700px;
+    background-color: #C4E8A5;
+    overflow: auto;
+    margin-left: 210px;
+
+}
+
+#newRecipeB {
+    background-color: #3B4D2B;
+    font-family: "Arial Black";
+    color: whitesmoke;
+}
+.newRecipeLabel {
+    font-family: Arial;
+    color: #333333;
+    font-size: 15px;
 }
 
 .searchtable {

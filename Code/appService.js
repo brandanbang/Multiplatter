@@ -594,6 +594,38 @@ async function fetchTable(tableName, columns) {
     });
 }
 
+async function toprecipe() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `SELECT r.Title FROM RECIPECREATESSORTEDBY r 
+            LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
+            LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
+            GROUP BY r.Title
+            HAVING AVG(rt.Rating) >= ALL (SELECT AVG(rt2.Rating)
+                                                 FROM RATING rt2
+                                                 LEFT JOIN FeedbackRespondsWithEngagesWith f on f.FeedbackID = rt2.FeedbackID
+                                                 LEFT JOIN RecipeCreatesSortedBy r2 on r2.RecipeID = f.RecipeID
+                                                 GROUP BY r2.Username) `);
+
+        if (result.rows.length > 0) {
+
+            console.log(result.rows);
+
+            let recipe = [];
+            for (let i = 0; i < result.rows.length; i++) {
+                recipe.push(result.rows[i]);
+            }
+            console.log(recipe);
+            return recipe;
+        } else {
+            return []
+        }
+    }).catch((err) => {
+        console.error('Error fetching top recipe:', err);
+        return [];
+    });
+}
+
 module.exports = {
     testOracleConnection,
     initiateAlltables,
@@ -617,6 +649,7 @@ module.exports = {
     fetchTable,
     getTags,
     getComments,
-    getUsedRecipeID
+    getUsedRecipeID,
+    toprecipe
 };
 

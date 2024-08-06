@@ -177,7 +177,6 @@ async function signUp(event) {
 
 
 async function displayTopUser() {
-    console.log('in  display');
         const response = await fetch('/topUser', {
             method: 'GET'
         });
@@ -193,10 +192,27 @@ async function displayTopUser() {
         }
 }
 
+async function displayTopRecipe() {
+    console.log('in  display recipe');
+    const response = await fetch('/topRecipe', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    console.log(responseData);
+
+    const topRecipeVal = document.getElementById('topRecipeVal');
+    if (responseData.data.length > 0) {
+        topRecipeVal.textContent = responseData.data.join(', ');
+    } else {
+        topRecipeVal.textContent = 'No top recipe yet!';
+    }
+}
 
 window.onload = function() {
     checkDbConnection();
     displayTopUser();
+    displayTopRecipe();
     document.getElementById("loginform").addEventListener("submit", login);
     document.getElementById("signUpform").addEventListener("submit", signUp);
 
