@@ -335,9 +335,11 @@ INSERT INTO SoldByCurrency (PostalCode, Currency) VALUES ('R3B0R5', 'CAD');
 INSERT INTO SoldByCurrency (PostalCode, Currency) VALUES ('T2P3G7', 'USD');
 -- Inserting values into SoldByLocation
 INSERT INTO SoldByLocation (PostalCode, Address, ItemName, Price) VALUES ('V5K0A1', '1234 Main St', 'Whisk', 4);
+INSERT INTO SoldByLocation (PostalCode, Address, ItemName, Price) VALUES ('V5K0A1', '1234 Main St', 'Sugar', 0.8);
 INSERT INTO SoldByLocation (PostalCode, Address, ItemName, Price) VALUES ('M5V2T6', '5678 Queen St', 'Sugar', 0.7);
 INSERT INTO SoldByLocation (PostalCode, Address, ItemName, Price) VALUES ('T2P3G7', '1213 4th Ave', 'Flour', 0.9);
 INSERT INTO SoldByLocation (PostalCode, Address, ItemName, Price) VALUES ('T2P3G7', '1213 4th Ave', 'Eggs', 0.8);
+INSERT INTO SoldByLocation (PostalCode, Address, ItemName, Price) VALUES ('R3B0R5', '1415 Ellice Ave', 'Eggs', 0.8);
 INSERT INTO SoldByLocation (PostalCode, Address, ItemName, Price) VALUES ('R3B0R5', '1415 Ellice Ave', 'Baking Tray', 3);
 INSERT INTO SoldByLocation (PostalCode, Address, ItemName, Price) VALUES ('T2P3G7', '1213 4th Ave', 'Baking Tray', 4);
 -- Inserting values into Substitutes
