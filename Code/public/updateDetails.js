@@ -31,7 +31,7 @@ console.log(username,password,oldPhoneNo,newPhoneNo,email,name);
     if (responseData.success) {
         messageElement.textContent = "Updated your details!";
     } else {
-        messageElement.textContent = "error updating details!";
+        messageElement.textContent = "error updating details! Either the password is wrong or email is already in use!";
     }
 }
 
