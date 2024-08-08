@@ -679,6 +679,25 @@ input::placeholder, textarea::placeholder {
     font-size: 15px;
 }
 
+#stores-container {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.store-card {
+    border: 1px solid #98fb98;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+    background-color: #e0f7e0;
+    box-shadow: 0 4px 8px rgba(0, 128, 0, 0.2);
+    transition: transform 0.2s;
+}
+.store-card:hover {
+    transform: scale(1.05);
+
 .searchtable {
     margin-left: 210px;
     margin-bottom: 20px;

@@ -552,6 +552,57 @@ async function createRecipe(Title, Picture, RecipeDescription, RecipeID, Usernam
     });
 }
 
+async function getStoresSellingIngredients(id) {
+
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT gsl.StoreName, gsl.Address, gsl.PostalCode, gsa.City, gsa.ProvinceState, gst.DaysOpen, gst.Timings
+            FROM GroceryStoreLocation gsl
+            LEFT JOIN GroceryStoreTimings gst ON gsl.StoreName = gst.StoreName
+            LEFT JOIN GroceryStoresArea gsa ON gsl.PostalCode = gsa.PostalCode
+            LEFT JOIN SoldByCurrency sbc ON gsl.PostalCode = sbc.PostalCode
+            WHERE NOT EXISTS ((
+                SELECT u.ItemName
+                FROM Uses u
+                WHERE u.RecipeID = :id)
+                MINUS (
+                    SELECT sbl.ItemName
+                    FROM SoldByLocation sbl
+                    WHERE sbl.PostalCode = gsl.PostalCode AND sbl.Address = gsl.Address))
+            `,
+            [id]
+        );
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function updateUser(event) {
+    let connection;
+    const response = await fetch('/api/user/updateAccount', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            Username: username,
+            Password: password,
+            NewCity: newCity,
+            NewProvinceState: newProvinceState
+        })
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.success) {
+        messageElement.textContent = "Updated successfully!";
+        fetchTableData();
+    } else {
+        messageElement.textContent = "Error updating!";
+    }
+}
+
 
 async function fetchAllTablesColumns() {
     return await withOracleDB(async (connection) => {
@@ -650,6 +701,6 @@ module.exports = {
     getTags,
     getComments,
     getUsedRecipeID,
+    getStoresSellingIngredients,
     toprecipe
 };
-

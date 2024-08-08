@@ -268,6 +268,28 @@ router.post("/createRecipe", async (req, res) => {
     }
 });
 
+router.post('/api/user/updateAccount', async (req, res) => {
+    const { username, password, newCity, newProvinceState  } = req.body;
+    const updateResult = await appService.updateUser(username, password, newCity, newProvinceState);
+    if (updateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.post('/filterStores', async (req, res) => {
+    try {
+        const rID = req.body.id[0];
+
+        const stores = await appService.getStoresSellingIngredients(rID);
+        res.json(stores);
+    } catch (err) {
+        console.error('Error getting store', err);
+        res.status(500).json({ error: 'no valid store!' });
+    }
+});
+
 router.get('/topUser', async (req, res) => {
     try {
         const tableContent = await appService.findTopUser();
@@ -313,4 +335,5 @@ router.get('/topRecipe', async (req, res) => {
         res.status(500).json({ error: 'no top recipe yet!' });
     }
 });
+
 module.exports = router;
