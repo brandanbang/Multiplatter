@@ -109,12 +109,9 @@ async function fetchRecipesFromDb() {
 async function fetchRecipesFromDbById(id) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`
-            SELECT r.Title, r.RecipeDescription, r.RecipeID, r.Username, r.DescriptorName, AVG(rt.Rating) as AvgRating
-            FROM RECIPECREATESSORTEDBY r
-            LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
-            LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
-            WHERE r.RecipeID = :id
-            GROUP BY r.Title, r.RecipeDescription, r.RecipeID, r.Username, r.DescriptorName`,
+            SELECT *
+            FROM RECIPECREATESSORTEDBY
+            WHERE RecipeID = :id`,
             [id]
         );
         return result.rows[0];
@@ -122,7 +119,6 @@ async function fetchRecipesFromDbById(id) {
         return [];
     });
 }
-
 async function getTags(id) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`
@@ -373,7 +369,6 @@ async function getComments(recipeID) {
     });
 }
 
-
 async function getCreatedRecipes(username) {
     let connection;
     try {
@@ -412,7 +407,7 @@ async function deleteAcount(phoneNo) {
         const result = await connection.execute(
             `DELETE FROM UserLocation WHERE PhoneNo = :phoneNo`,
             [phoneNo],
-            {autoCommit: true}
+            {autoCommit:true}
         );
         console.log('almost done try appservice');
         return result.rowsAffected > 0 && result.rowsAffected > 0;
@@ -443,7 +438,7 @@ async function getFilteredRecipes(filters) {
     let ratingCondition = '';
 
     filters.forEach((filter, index) => {
-        const {option, rating, andOr} = filter;
+        const { option, rating, andOr } = filter;
         let currentCondition = '';
         let currentConditionRating = '';
 
@@ -468,15 +463,15 @@ async function getFilteredRecipes(filters) {
         }
     });
 
-    console.log(conditions);
+    console.log( conditions);
     console.log(ratingCondition);
 
-    if (conditions.length > 0) {
-        sqlCode += ' ' + 'WHERE ' + conditions.join(' ') + ' ' +
+    if(conditions.length > 0) {
+        sqlCode += ' '  + 'WHERE ' + conditions.join(' ')+ ' ' +
             'GROUP BY r.RecipeID, r.Title, r.RecipeDescription ' + ratingCondition;
     } else {
-        sqlCode += ' ' + 'GROUP BY r.RecipeID, r.Title, r.RecipeDescription '
-            + ratingCondition;
+        sqlCode +=' ' + 'GROUP BY r.RecipeID, r.Title, r.RecipeDescription '
+            +  ratingCondition;
     }
 
     console.log(sqlCode);
@@ -609,6 +604,79 @@ async function updateUser(event) {
 }
 
 
+async function fetchAllTablesColumns() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `SELECT table_name,listagg(column_name,',')
+                          WITHIN GROUP ( ORDER BY column_id ) columns
+                          FROM user_tab_cols
+                          GROUP BY table_name`);
+        if (result.rows.length > 0) {
+            console.log(result.rows);
+            console.log(result.rows[0]);
+            console.log(result.rows[1]);
+            return result.rows;
+        } else {
+            return []
+        }
+    }).catch((err) => {
+        console.error('Error fetching top user:', err);
+        return [];
+    });
+}
+
+// Resource https://stackoverflow.com/questions/36747495/listing-all-tables-and-columns-from-my-database-oracle
+// https://docs.oracle.com/en/database/oracle/oracle-database/21/sqlrf/LISTAGG.html
+
+async function fetchTable(tableName, columns) {
+    return await withOracleDB(async (connection) => {
+        const columnNames = columns.join(', ');
+        const sql = `SELECT ${columnNames} FROM ${tableName}`;
+
+        console.log('SQL:', sql);
+        const result = await connection.execute(
+            `SELECT ${columnNames} FROM ${tableName}`);
+
+        return result.rows;
+
+    }).catch((err) => {
+        console.error('Error fetching table:', err);
+        return [];
+    });
+}
+
+async function toprecipe() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `SELECT r.Title FROM RECIPECREATESSORTEDBY r 
+            LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
+            LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
+            GROUP BY r.Title
+            HAVING AVG(rt.Rating) >= ALL (SELECT AVG(rt2.Rating)
+                                                 FROM RATING rt2
+                                                 LEFT JOIN FeedbackRespondsWithEngagesWith f on f.FeedbackID = rt2.FeedbackID
+                                                 LEFT JOIN RecipeCreatesSortedBy r2 on r2.RecipeID = f.RecipeID
+                                                 GROUP BY r2.Username) `);
+
+        if (result.rows.length > 0) {
+
+            console.log(result.rows);
+
+            let recipe = [];
+            for (let i = 0; i < result.rows.length; i++) {
+                recipe.push(result.rows[i]);
+            }
+            console.log(recipe);
+            return recipe;
+        } else {
+            return []
+        }
+    }).catch((err) => {
+        console.error('Error fetching top recipe:', err);
+        return [];
+    });
+}
+
 module.exports = {
     testOracleConnection,
     initiateAlltables,
@@ -628,8 +696,11 @@ module.exports = {
     deleteAcount,
     getFilteredRecipes,
     findTopUser,
+    fetchAllTablesColumns,
+    fetchTable,
     getTags,
     getComments,
     getUsedRecipeID,
-    getStoresSellingIngredients
+    getStoresSellingIngredients,
+    toprecipe
 };

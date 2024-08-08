@@ -153,6 +153,7 @@ router.get('/comments/:id(\\d+)', async (req, res) => {
     }
 });
 
+
 router.post("/logintable", async (req, res) => {
     const { Username, Password } = req.body;
     const loginResult = await appService.loginUser(Username, Password);
@@ -240,17 +241,6 @@ router.post('/filteredRecipes', async (req, res) => {
     }
 });
 
-router.get('/topUser', async (req, res) => {
-    try {
-        const tableContent = await appService.findTopUser();
-        console.log( tableContent);
-        res.json({ data: tableContent });
-    } catch (err) {
-        console.error('Error getting user', err);
-        res.status(500).json({ error: 'no top user yet!' });
-    }
-});
-
 router.get('/getUsedRecipeID', async (req, res) => {
     try {
         const tableContent = await appService.getUsedRecipeID();
@@ -297,6 +287,52 @@ router.post('/filterStores', async (req, res) => {
     } catch (err) {
         console.error('Error getting store', err);
         res.status(500).json({ error: 'no valid store!' });
+    }
+});
+
+router.get('/topUser', async (req, res) => {
+    try {
+        const tableContent = await appService.findTopUser();
+        console.log( tableContent);
+        res.json({ data: tableContent });
+    } catch (err) {
+        console.error('Error getting user', err);
+        res.status(500).json({ error: 'no top user yet!' });
+    }
+});
+
+router.get('/tableColumn', async (req, res) => {
+    try {
+        const tableContent = await appService.fetchAllTablesColumns();
+        console.log( tableContent);
+        res.json({ data: tableContent });
+    } catch (err) {
+        console.error('Error getting all tables and columns', err);
+        res.status(500).json({ error: 'error!' });
+    }
+});
+//
+router.post('/fetchData', async (req, res) => {
+    const { tableName, columns } = req.body;
+    // console.log('c in ac',columns);
+    // console.log('in ac')
+    try {
+        const data = await appService.fetchTable(tableName, columns);
+        res.json({ data });
+    } catch (err) {
+        console.error('Error fetching data:', err);
+        res.status(500).json({ error: 'Error fetching data' });
+    }
+});
+
+router.get('/topRecipe', async (req, res) => {
+    try {
+        const tableContent = await appService.toprecipe();
+        console.log( tableContent);
+        res.json({ data: tableContent });
+    } catch (err) {
+        console.error('Error getting recipe', err);
+        res.status(500).json({ error: 'no top recipe yet!' });
     }
 });
 

@@ -199,12 +199,14 @@ CREATE TABLE Saves (
 
 -- Inserting values into UserLocation
 INSERT INTO UserLocation (PhoneNo, ProvinceState, City) VALUES (1234567890, 'British Columbia', 'Vancouver');
+INSERT INTO UserLocation (PhoneNo, ProvinceState, City) VALUES (1234567899, 'British Columbia', 'Vancouver');
 INSERT INTO UserLocation (PhoneNo, ProvinceState, City) VALUES (1345678901, 'Zinj', 'Manama');
 INSERT INTO UserLocation (PhoneNo, ProvinceState, City) VALUES (1456789012, 'Quebec', 'Montreal');
 INSERT INTO UserLocation (PhoneNo, ProvinceState, City) VALUES (1567890123, 'Calgary', 'Alberta');
 INSERT INTO UserLocation (PhoneNo, ProvinceState, City) VALUES (1678901234, 'Manitoba', 'Winnipeg');
 INSERT INTO UserLocation (PhoneNo, ProvinceState, City) VALUES (1678901284, 'Mumbai', 'Maharashtra');
 INSERT INTO UserDetails (Username,Password, PhoneNo, Email, Name) VALUES ('chef_janes','pass*7600', 1234567890, 'jane.stevens@gmail.com', 'Jane Stevens');
+INSERT INTO UserDetails (Username,Password, PhoneNo, Email, Name) VALUES ('admin','pass1234', 1234567899, 'admin@gmail.com', 'Admin');
 INSERT INTO UserDetails (Username,Password, PhoneNo, Email, Name) VALUES ('greatestBossEver','Jisny56', 1345678901, 'micheal.scott@yahoo.com', 'Michael Scott');
 INSERT INTO UserDetails (Username,Password, PhoneNo, Email, Name) VALUES ('culinary_queen248','J8gBkF5', 1456789012, 'alice.cooper_12@gmail.com', 'Alice Cooper');
 INSERT INTO UserDetails (Username,Password, PhoneNo, Email, Name) VALUES ('bake_master','pass7856', 1567890123, 'james.brown@gmail.com', 'James Brown');
@@ -355,3 +357,5 @@ INSERT INTO Saves(RecipeID, Username) VALUES (103, 'greatestBossEver');
 INSERT INTO Saves(RecipeID, Username) VALUES (101, 'greatestBossEver');
 INSERT INTO Saves(RecipeID, Username) VALUES (104, 'bake_master');
 COMMIT;
+
+

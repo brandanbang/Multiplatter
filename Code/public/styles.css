@@ -460,39 +460,6 @@ input::placeholder, textarea::placeholder {
 
 
 
-
-
-
-#tag-list {
-    display: flow;
-    justify-content: left;
-}
-
-.tag-card {
-    margin: 3px;
-    text-align: left;
-    transition: transform 0.2s;
-}
-
-.tagExplanation {
-    font-family: "Arial Black";
-    margin: 3px;
-    font-size: 10px;
-    padding: 10px;
-    display: none;
-}
-.tag-card:hover .tagExplanation{
-    transform: scale(1.05);
-    display: block;
-}
-.tag {
-    margin-top: 8px;
-    font-size: 12px;
-}
-
-
-
-
 #equipment-list {
     display: grid;
     grid-template-columns: repeat(2, 2fr);
@@ -556,14 +523,6 @@ input::placeholder, textarea::placeholder {
     color: #556b2f;
     font-size: 12px;
 }
-.time {
-    margin-top: 6px;
-    color: #556b2f;
-    font-size: 8px;
-}
-
-
-
 
 
 .createdRecipeContainer {
@@ -612,12 +571,7 @@ input::placeholder, textarea::placeholder {
     margin-left: 210px;
     width: 150px;
     height: 300px;
-    /*display: flex;*/
     text-align: center;
-    /*border-radius: 10px;*/
-    /*border: 10px solid  ;*/
-    /*border-color: #3B4D2B;*/
-    /*overflow: scroll;*/
 
 }
 
@@ -632,12 +586,26 @@ input::placeholder, textarea::placeholder {
 
 #topUserVal {
     font-family: Impact;
-    font-size: 30px;
+    font-size: 25px;
     /*overflow: scroll;*/
 }
 
+#topRecipe {
+    font-family: Impact;
+    font-size: 50px;
+}
 
+#topRecipeVal {
+    font-family: Impact;
+    font-size: 25px;
+}
 
+.topRecipe {
+    margin-left: 210px;
+    width: 150px;
+    height: 300px;
+    text-align: center;
+}
 .comments {
     font-family: "Arial Black";
     margin-left: 230px;
@@ -711,8 +679,6 @@ input::placeholder, textarea::placeholder {
     font-size: 15px;
 }
 
-
-
 #stores-container {
     margin-top: 20px;
     display: flex;
@@ -731,4 +697,39 @@ input::placeholder, textarea::placeholder {
 }
 .store-card:hover {
     transform: scale(1.05);
+
+.searchtable {
+    margin-left: 210px;
+    margin-bottom: 20px;
+    /*height: 20px;*/
+    display: flex;
+    /*overflow: scroll;*/
+}
+
+#tableGroup {
+    height: 30px;
+}
+#applyTable {
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    height: 35px;
+    background: #3B4D2B;
+}
+
+#attributes {
+    background-color: whitesmoke;
+    margin-left: 10px;
+    display: block;
+    height: 100%;
+    /*border: solid #3B4D2B;*/
+}
+
+#tableResult {
+    margin-left: 210px;
+    display: inline-block;
+    /*text-align: center;*/
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-family: Georgia;
 }

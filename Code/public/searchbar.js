@@ -28,12 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
         descriptorOptgroup.append(new Option('quick', 'quick'));
         options.appendChild(descriptorOptgroup);
 
-        const ratingOptgroup = document.createElement('optgroup');
-        ratingOptgroup.label = 'ratings';
-        ratingOptgroup.className = 'ratings';
-        ratingOptgroup.append(new Option('4+', '4'));
-        options.appendChild(ratingOptgroup);
-
         filterBar.appendChild(options);
         filtersContainer.appendChild(filterBar);
 

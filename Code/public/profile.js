@@ -11,9 +11,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const loginLink = document.getElementById('loginLink');
     const profileLink = document.getElementById('profileLink');
     const logoutLink = document.getElementById('logoutLink');
+    const adminLink = document.getElementById('adminLink');
 
     loginLink.style.display = 'none';
     profileLink.style.display = 'block';
+   adminLink.style.display = 'none';
     logoutLink.style.display = 'block';
 
     try {
