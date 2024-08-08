@@ -268,15 +268,15 @@ router.post("/createRecipe", async (req, res) => {
     }
 });
 
-router.post('/api/user/updateAccount', async (req, res) => {
-    const { username, password, newCity, newProvinceState  } = req.body;
-    const updateResult = await appService.updateUser(username, password, newCity, newProvinceState);
-    if (updateResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
+// router.post('/api/user/updateAccount', async (req, res) => {
+//     const { username, password, newCity, newProvinceState  } = req.body;
+//     const updateResult = await appService.updateUser(username, password, newCity, newProvinceState);
+//     if (updateResult) {
+//         res.json({ success: true });
+//     } else {
+//         res.status(500).json({ success: false });
+//     }
+// });
 
 router.post('/filterStores', async (req, res) => {
     try {
@@ -333,6 +333,16 @@ router.get('/topRecipe', async (req, res) => {
     } catch (err) {
         console.error('Error getting recipe', err);
         res.status(500).json({ error: 'no top recipe yet!' });
+    }
+});
+
+router.post('/updateUserDetails', async (req, res) => {
+    const { Username,Password,OldPhoneNo,NewPhoneNo,Email,Name,Confirm } = req.body;
+    const updateResult = await appService.updateUserDetails(Username,Password,OldPhoneNo,NewPhoneNo,Email,Name,Confirm);
+    if (updateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
     }
 });
 

@@ -56,4 +56,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         event.preventDefault();
         window.location.href = `deleteAccount.html?username=${username}`;
     });
+
+    document.getElementById('updateDetailsLink').addEventListener('click', (event) => {
+        event.preventDefault();
+        window.location.href = `updateDetails.html?username=${username}`;
+    });
+
 });

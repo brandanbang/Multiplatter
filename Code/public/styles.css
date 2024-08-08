@@ -569,9 +569,13 @@ input::placeholder, textarea::placeholder {
 .topUser {
     /*margin-top: 20px;*/
     margin-left: 210px;
-    width: 150px;
-    height: 300px;
+    /*width: 150px;*/
+    /*height: 300px;*/
     text-align: center;
+    border: solid;
+    border-color: #3B4D2B;
+    border-width: 10px;
+    background-color: #D4EAC0;
 
 }
 
@@ -602,9 +606,13 @@ input::placeholder, textarea::placeholder {
 
 .topRecipe {
     margin-left: 210px;
-    width: 150px;
-    height: 300px;
+    /*width: 100px;*/
+    /*height: 200px;*/
     text-align: center;
+    border: solid;
+    border-color: #3B4D2B;
+    border-width: 10px;
+    background-color: #D4EAC0 ;
 }
 .comments {
     font-family: "Arial Black";
@@ -697,6 +705,7 @@ input::placeholder, textarea::placeholder {
 }
 .store-card:hover {
     transform: scale(1.05);
+}
 
 .searchtable {
     margin-left: 210px;
@@ -732,4 +741,11 @@ input::placeholder, textarea::placeholder {
     margin-bottom: 20px;
     font-size: 20px;
     font-family: Georgia;
+}
+
+.aboutUsp {
+    padding: 15px;
+    font-family: "Arial Black";
+    font-size: 16px;
+    line-height: 1.5;
 }

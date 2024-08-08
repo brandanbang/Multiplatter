@@ -22,10 +22,10 @@
     <a href="create.html">CREATE</a>
     <a href="recipes.html">RECIPES</a>
     <a href="groceryStores.html">GROCERY STORES</a>
-    <a id="loginLink" href="signIn.html">SIGN IN</a> <!-- Placeholder for login -->
-    <a id="profileLink" href="profile.html" style="display:none;">PROFILE</a> <!-- Placeholder for profile -->
-    <a id="logoutLink" href="#" style="display:none;">LOGOUT</a> <!-- Placeholder for logout -->
+    <a id="loginLink" href="signIn.html">SIGN IN</a>
+    <a id="profileLink" href="profile.html" style="display:none;">PROFILE</a>
     <a id="adminLink" href="admin.html" style="display:none;">ADMIN</a>
+    <a id="logoutLink" href="#" style="display:none;">LOGOUT</a>
 </div>
 <script src="scripts.js"></script>
 <script src="sidebar.js"></script>
@@ -43,6 +43,7 @@
         <div class="filterBar" id="filterBar">
             <select class="options">
                 <optgroup label="descriptors" class="descriptors">
+                    <option value="">all</option>
                     <option value="breakfast">breakfast</option>
                     <option value="lunch">lunch</option>
                     <option value="dinner">dinner</option>
@@ -52,6 +53,7 @@
                 </optgroup>
             </select>
             <select class="ratings" id="ratings">
+                <option value=""></option>
                 <option value="4">4+</option>
                 <option value="3">3+</option>
                 <option value="2">2+</option>
@@ -63,7 +65,6 @@
 </div>
 
 <br>
-
 <div id="recipes-container"></div>
 <br>
 <br>

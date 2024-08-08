@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Link to the external CSS stylesheet. Uncomment if you wish to customize or add styling. -->
-    <link rel="stylesheet" href="styles.css">
-    <script src = "allrecipes.js"></script>
+    <link rel="stylesheet" href="profile.css">
+
     <title>Multiplatter </title>
 </head>
 <body>
-
 <!--   SIDEBAR-->
 <button id="toggleSidebarBtn">☰</button>
 <div class="sidebar" id="sidebar">
@@ -29,34 +28,44 @@
 </div>
 <script src="scripts.js"></script>
 <script src="sidebar.js"></script>
-
+<!--<script src="deleteAccount.js"></script>-->
 
 <header class="Header">
     <div class="headerText">Multiplatter</div>
 </header>
 
-<h1><u>ADMIN</u></h1>
-<p>Select A Table</p>
-
-
-<section class="searchtable">
-    <select class="tableGroup" id="tableGroup"> Find</select>
-    <div id="attributes"></div>
-
-    <button id="applyTable" >GO</button>
-</section>
-<div id="tableResult">
-
+<div id="updateAccountContainer">
+    <form id="updateform">
+        <h2> UPDATE DETAILS</h2>
+        <label class="signinLabel">Password:</label>
+        <input type="password" id="updateP" placeholder="Enter password">
+        <br>
+        <label class="signinLabel">Old Phone Number:</label>
+        <input type="number" id="updatePnO" placeholder="Enter old phone number">
+        <br>
+        <label class="signinLabel">New Phone Number:</label>
+        <input type="number" id="updatePnN" placeholder="Enter new phone number">
+        <br>
+        <label class="signinLabel">Email:</label>
+        <input type="email" id="updateE" placeholder="Enter email">
+        <br>
+        <label class="signinLabel">Name:</label>
+        <input type="text" id="updateN" placeholder="Enter name">
+        <br>
+        <label class="signinLabel">Confirm (enter your old password if you are updating password):</label>
+        <input type="password" id="updateC" placeholder="Enter password">
+        <br>
+        <div id="updateResultMsgD"></div>
+        <button type="submit" id="loginB"> Submit</button>
+    </form>
 </div>
-<br>
+
+<script src="/profile.js"></script>
+<script src="updateDetails.js"></script>
+
 <footer class="Footer">
     <div class="footerText"> Contact Info:</div>
 </footer>
-
-<script src="scripts.js"></script>
-<script src="admin.js"></script>
-<script src="searchbar.js"></script>
-<script src="admin.js"></script>
 
 </body>
 </html>

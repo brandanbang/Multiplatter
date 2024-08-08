@@ -195,8 +195,6 @@ CREATE TABLE Saves (
 
 
 
-
-
 -- Inserting values into UserLocation
 INSERT INTO UserLocation (PhoneNo, ProvinceState, City) VALUES (1234567890, 'British Columbia', 'Vancouver');
 INSERT INTO UserLocation (PhoneNo, ProvinceState, City) VALUES (1234567899, 'British Columbia', 'Vancouver');
@@ -357,5 +355,3 @@ INSERT INTO Saves(RecipeID, Username) VALUES (103, 'greatestBossEver');
 INSERT INTO Saves(RecipeID, Username) VALUES (101, 'greatestBossEver');
 INSERT INTO Saves(RecipeID, Username) VALUES (104, 'bake_master');
 COMMIT;
-
-

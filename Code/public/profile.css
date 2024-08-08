@@ -156,3 +156,19 @@ footer {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     font-family: Georgia;
 }
+
+#updateAccountContainer {
+    display: block;
+    align-items: center;
+    width: 80%;
+    margin-top: 100px;
+    margin-left: 210px;
+    margin-right:10px;
+    margin-bottom: 10px;
+    padding: 100px;
+    border: 2px solid darkgreen;
+    border-radius: 10px;
+    background-color: #D9FBBB;;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: Georgia;
+}

@@ -113,11 +113,11 @@ document.addEventListener('DOMContentLoaded', function() {
         //     document.getElementById('username').textContent = username;
         // }
         const isAdmin = localStorage.getItem('isAdmin') === 'true';
-        console.log(isAdmin);
+        console.log('isadmin',isAdmin);
 
         if(isAdmin) {
             adminLink.style.display = 'block';
-            profileLink.style.display = 'block';
+            profileLink.style.display = 'none';
         } else {
             profileLink.style.display = 'block';
             adminLink.style.display = 'none';
@@ -171,7 +171,7 @@ async function signUp(event) {
         messageElement.textContent = "Signed up successfully! You can log in now";
     } else {
         messageElement.textContent = "Error signing up!" +
-            "Either Email or Phone Number or Email is already in Use";
+            "Either Email or Phone Number or Username is already in Use";
     }
 }
 

@@ -197,11 +197,7 @@ async function loginUser(username, password) {
 }
 
 async function getUserDetails(username) {
-    let connection;
-
-    try {
-        connection = await oracledb.getConnection(dbConfig);
-
+    return await withOracleDB(async (connection) => {
         const result = await connection.execute(
             `SELECT ud.Username, ud.Name, ud.Email, ud.PhoneNo, ul.City, ul.ProvinceState
              FROM UserDetails ud
@@ -223,18 +219,12 @@ async function getUserDetails(username) {
         } else {
             return null;
         }
-    } catch (err) {
-        console.error('Error in getUserDetails:', err);
+
+    }).catch(() => {
+        console.error('Error in getUserDetails:');
         return null;
-    } finally {
-        if (connection) {
-            try {
-                await connection.close();
-            } catch (err) {
-                console.error('Error closing connection in getUserDetails:', err);
-            }
-        }
-    }
+    });
+
 }
 
 async function signupUser(city, provinceState, username, password, phoneNo, email, name) {
@@ -285,9 +275,7 @@ async function signupUser(city, provinceState, username, password, phoneNo, emai
 }
 
 async function getSavedRecipes(username) {
-    let connection;
-    try {
-        connection = await oracledb.getConnection(dbConfig);
+    return await withOracleDB(async (connection) => {
         const result = await connection.execute(
             `SELECT r.RecipeID, r.Title, r.RecipeDescription, AVG(rt.Rating) AS AvgRating
              FROM RecipeCreatesSortedBy r
@@ -298,21 +286,12 @@ async function getSavedRecipes(username) {
              GROUP BY r.RecipeID, r.Title, r.RecipeDescription
             `,
             [username]
-            //{ outFormat: oracledb.OUT_FORMAT_OBJECT } // TODO: Check tomorrow if this is needed
         );
         return result.rows;
-    } catch (err) {
-        console.error('Error fetching saved recipes:', err);
-        throw err;
-    } finally {
-        if (connection) {
-            try {
-                await connection.close();
-            } catch (err) {
-                console.error('Error closing connection:', err);
-            }
-        }
-    }
+    }).catch((err) => {
+        console.error(err);
+        return [];
+    });
 }
 
 async function getInstruction(recipeID) {
@@ -370,9 +349,7 @@ async function getComments(recipeID) {
 }
 
 async function getCreatedRecipes(username) {
-    let connection;
-    try {
-        connection = await oracledb.getConnection(dbConfig);
+    return await withOracleDB(async (connection) => {
         const result = await connection.execute(
             `SELECT r.RecipeID, r.Title, r.RecipeDescription, AVG(rt.Rating) AS AvgRating
             FROM RecipeCreatesSortedBy r
@@ -384,26 +361,15 @@ async function getCreatedRecipes(username) {
             [username],
         );
         return result.rows;
-    } catch (err) {
+    }).catch((err) => {
         console.error('Error fetching your recipes:', err);
-        throw err;
-    } finally {
-        if (connection) {
-            try {
-                await connection.close();
-            } catch (err) {
-                console.error('Error closing connection:', err);
-            }
-        }
-    }
+        return [];
+    });
 }
 
 
 async function deleteAcount(phoneNo) {
-    let connection;
-    try {
-        console.log('in try appservice');
-        connection = await oracledb.getConnection(dbConfig);
+    return await withOracleDB(async (connection) => {
         const result = await connection.execute(
             `DELETE FROM UserLocation WHERE PhoneNo = :phoneNo`,
             [phoneNo],
@@ -411,18 +377,10 @@ async function deleteAcount(phoneNo) {
         );
         console.log('almost done try appservice');
         return result.rowsAffected > 0 && result.rowsAffected > 0;
-    } catch (err) {
+    }).catch((err) => {
         console.error('Error!', err);
-        throw err;
-    } finally {
-        if (connection) {
-            try {
-                await connection.close();
-            } catch (err) {
-                console.error('Error closing connection', err);
-            }
-        }
-    }
+        return false;
+    });
 }
 
 async function getFilteredRecipes(filters) {
@@ -508,8 +466,8 @@ async function findTopUser() {
         } else {
             return []
         }
-    }).catch((err) => {
-        console.error('Error fetching top user:', err);
+    }).catch(() => {
+        console.error('Error fetching top user:');
         return [];
     });
 }
@@ -578,30 +536,30 @@ async function getStoresSellingIngredients(id) {
     });
 }
 
-async function updateUser(event) {
-    let connection;
-    const response = await fetch('/api/user/updateAccount', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            Username: username,
-            Password: password,
-            NewCity: newCity,
-            NewProvinceState: newProvinceState
-        })
-    });
-
-    const responseData = await response.json();
-
-    if (responseData.success) {
-        messageElement.textContent = "Updated successfully!";
-        fetchTableData();
-    } else {
-        messageElement.textContent = "Error updating!";
-    }
-}
+// async function updateUser(event) {
+//     let connection;
+//     const response = await fetch('/api/user/updateAccount', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//             Username: username,
+//             Password: password,
+//             NewCity: newCity,
+//             NewProvinceState: newProvinceState
+//         })
+//     });
+//
+//     const responseData = await response.json();
+//
+//     if (responseData.success) {
+//         messageElement.textContent = "Updated successfully!";
+//         fetchTableData();
+//     } else {
+//         messageElement.textContent = "Error updating!";
+//     }
+// }
 
 
 async function fetchAllTablesColumns() {
@@ -671,9 +629,59 @@ async function toprecipe() {
         } else {
             return []
         }
-    }).catch((err) => {
-        console.error('Error fetching top recipe:', err);
+    }).catch(() => {
+        console.error('Error fetching top recipe:');
         return [];
+    });
+}
+
+async function updateUserDetails(username,password,oldPhoneNo,newPhoneNo,email,name,confirm) {
+    return await withOracleDB(async (connection) => {
+        let sql =[];
+        let bindVar = [];
+        // let resultPn;
+        if (username.length !== 0) {
+            const confirmResult = await connection.execute(`
+            SELECT u.Password
+            FROM UserDetails u
+            WHERE u.Username = :username AND u.Password = :confirm
+        `,[username,confirm]);
+            if (confirmResult.rows.length > 0) {
+                if (password) {
+                    sql.push(`Password = :password`);
+                    bindVar.push(password);
+                }
+                // if (oldPhoneNo && newPhoneNo) {
+                //     await connection.execute(`UPDATE UserLocation SET PhoneNo = :newPhoneNo WHERE PhoneNo = :oldPhoneNo`
+                //         , [newPhoneNo,oldPhoneNo], { autoCommit: true });
+                //     resultPn = await connection.execute(`UPDATE UserLocation SET PhoneNo = :newPhoneNo WHERE PhoneNo = :oldPhoneNo`
+                //         , [newPhoneNo,oldPhoneNo], { autoCommit: true });
+                // }
+                if (email) {
+                    sql.push(`Email = :email`);
+                    bindVar.push(email);
+                }
+                if (name) {
+                    sql.push(`Name = :name`);
+                    bindVar.push(name);
+                }
+            } else {
+                console.error('wrong password');
+                return false;
+            }
+        }
+        bindVar.push(username);
+        if (sql.length === 0) {
+            console.error('No attributes to update');
+        }
+
+        let sqlCode = `UPDATE UserDetails SET ` + sql.join(', ') + ' WHERE Username = :username';
+        console.log(sqlCode);
+        const result = await connection.execute(sqlCode, bindVar, { autoCommit: true }
+        );
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
     });
 }
 
@@ -702,5 +710,6 @@ module.exports = {
     getComments,
     getUsedRecipeID,
     getStoresSellingIngredients,
-    toprecipe
+    toprecipe,
+    updateUserDetails
 };
