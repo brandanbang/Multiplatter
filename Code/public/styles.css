@@ -576,6 +576,8 @@ input::placeholder, textarea::placeholder {
     border-color: #3B4D2B;
     border-width: 10px;
     background-color: #D4EAC0;
+    padding: 5px;
+    overflow: scroll;
 
 }
 
@@ -583,6 +585,7 @@ input::placeholder, textarea::placeholder {
 #topUser {
     font-family: Impact;
     font-size: 50px;
+
     /*align-text: center;*/
     /*overflow: scroll;*/
 
@@ -596,12 +599,16 @@ input::placeholder, textarea::placeholder {
 
 #topRecipe {
     font-family: Impact;
+    margin-top: 10px;
     font-size: 50px;
+    background-color: #3B4D2B;
+    color: whitesmoke;
 }
 
 #topRecipeVal {
     font-family: Impact;
     font-size: 25px;
+    padding: 5px;
 }
 
 .topRecipe {
@@ -613,6 +620,7 @@ input::placeholder, textarea::placeholder {
     border-color: #3B4D2B;
     border-width: 10px;
     background-color: #D4EAC0 ;
+    overflow: scroll;
 }
 .comments {
     font-family: "Arial Black";
@@ -748,4 +756,8 @@ input::placeholder, textarea::placeholder {
     font-family: "Arial Black";
     font-size: 16px;
     line-height: 1.5;
+}
+
+.recipeLink {
+    color: #3B4D2B;
 }

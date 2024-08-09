@@ -209,10 +209,11 @@ async function displayTopRecipe() {
     }
 }
 
+
 window.onload = function() {
     checkDbConnection();
     displayTopUser();
-    displayTopRecipe();
+    document.getElementById('topRecipe').addEventListener('click', displayTopRecipe);
     document.getElementById("loginform").addEventListener("submit", login);
     document.getElementById("signUpform").addEventListener("submit", signUp);
 
