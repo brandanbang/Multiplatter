@@ -346,4 +346,16 @@ router.post('/updateUserDetails', async (req, res) => {
     }
 });
 
+router.get('/quickRecipe', async (req, res) => {
+    try {
+        const tableContent = await appService.quickrecipe();
+        console.log( tableContent);
+        res.json({ data: tableContent });
+    } catch (err) {
+        console.error('Error getting recipe', err);
+        res.status(500).json({ error: 'no quick recipe yet!' });
+    }
+});
+
+
 module.exports = router;

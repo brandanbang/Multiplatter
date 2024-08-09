@@ -216,6 +216,8 @@ INSERT INTO Descriptors (DescriptorName, DescriptorDescription) VALUES ('French 
 INSERT INTO Descriptors (DescriptorName, DescriptorDescription) VALUES ('spicy', 'a dish flavoured with spices or chilli peppers');
 INSERT INTO Descriptors (DescriptorName, DescriptorDescription) VALUES ('quick', 'a meal that takes less than 10 minutes to prepare');
 INSERT INTO Descriptors (DescriptorName, DescriptorDescription) VALUES ('dessert', 'The sweet course eaten at the end of a meal');
+INSERT INTO Descriptors (DescriptorName, DescriptorDescription) VALUES ('breakfast', 'The first meal of the day');
+
 -- Inserting values into RecipeCreatesSortedBy
 INSERT INTO RecipeCreatesSortedBy (Title, Picture, RecipeDescription, RecipeID, Username, DescriptorName) VALUES ('Classic Chocolate Cake', NULL,'A rich and moist chocolate cake perfect for any occasion.', 101, 'chef_janes', 'dessert');
 INSERT INTO RecipeCreatesSortedBy (Title, Picture, RecipeDescription, RecipeID, Username, DescriptorName) VALUES ('Spaghetti Bolognese', NULL, 'A traditional Italian pasta dish with a flavorful meat sauce.', 103, 'best_cook_2', 'lunch');
@@ -228,22 +230,32 @@ INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Preheat the oven to
 INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Mix flour and sugar in a bowl.', 10);
 INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Chop the onions into julienne strips and dice the garlic.', 15);
 INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Heat oil in a pan and sauté onions and garlic. Then deglaze the pan with white wine.', 20);
+INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Add the grated tofu and the chopped vegetables. Continue to stir fry.', 15);
 INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Boil the pasta to al dente.', 10);
+INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Assemble your tacos. You can add Salsa, fresh avocados or top it with some vegan sour cream.', 10);
 INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Blanch the spinach.', 5);
 INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Toast the bread.', 3);
+INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Slice the avocado and put it on the toast. Add lemon, salt and garlic powder. Finally add the fried egg on top', 3);
 INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Mix pasta with prepared sauce.', 1);
 INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Juice and zest the lemon.', 2);
+INSERT INTO InstructionTime (Instruction, Duration) VALUES ('Bake the cake.', 50);
+INSERT INTO InstructionTime (Instruction, Duration) VALUES ('In a bowl add flour,baking powder,sugar. In another bowl add eggs,vanilla extract and milk. Mix the mixtures thoroughly. Add the dry mix to the wet mix amd mix more', 15);
 
 -- Inserting values into InstructionStep
 INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (101, 'Preheat the oven to 350 degrees F.', 1);
 INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (101, 'Mix flour and sugar in a bowl.', 2);
 INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (102, 'Chop the onions into julienne strips and dice the garlic.', 1);
 INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (102, 'Heat oil in a pan and sauté onions and garlic. Then deglaze the pan with white wine.', 2);
+INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (102, 'Add the grated tofu and the chopped vegetables. Continue to stir fry.', 3);
+INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (102, 'Assemble your tacos. You can add Salsa, fresh avocados or top it with some vegan sour cream.', 4);
 INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (103, 'Boil the pasta to al dente.', 1);
 INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (103, 'Mix pasta with prepared sauce.', 2);
 INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (104, 'Blanch the spinach.', 1);
 INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (106, 'Toast the bread.', 1);
+INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (106, 'Slice the avocado and put it on the toast. Add lemon, salt and garlic powder. Finally add the fried egg on top', 2);
 INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (105, 'Juice and zest the lemon.', 1);
+INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (105, 'In a bowl add flour,baking powder,sugar. In another bowl add eggs,vanilla extract and milk. Mix the mixtures thoroughly. Add the dry mix to the wet mix amd mix more', 2);
+INSERT INTO InstructionStep (RecipeID, Instruction, StepNumber) VALUES (105, 'Bake the cake.', 3);
 
 -- Inserting values into GroceryStoresArea
 INSERT INTO GroceryStoresArea (PostalCode, City, ProvinceState) VALUES ('V5K0A1', 'Vancouver', 'British Columbia');
@@ -267,6 +279,8 @@ INSERT INTO GroceryStoreLocation (PostalCode, Address, StoreName) VALUES ('R3B0R
 INSERT INTO RequiredItems (ItemName, ItemDescription) VALUES ('Flour', 'All-purpose flour used for baking and cooking.');
 INSERT INTO RequiredItems (ItemName, ItemDescription) VALUES ('Sugar', 'Granulated white sugar for sweetening.');
 INSERT INTO RequiredItems (ItemName, ItemDescription) VALUES ('Eggs', 'Fresh eggs for baking and cooking.');
+INSERT INTO RequiredItems (ItemName, ItemDescription) VALUES ('Avocado', 'Ripe avocados for toast or guacamole.');
+INSERT INTO RequiredItems (ItemName, ItemDescription) VALUES ('Bread', 'Fresh bread suitable for toast and sandwiches.');
 INSERT INTO RequiredItems (ItemName, ItemDescription) VALUES ('Whisk', 'A utensil for whipping eggs or cream');
 INSERT INTO RequiredItems (ItemName, ItemDescription) VALUES ('Baking Tray', 'A metal tray on which food may be cooked in an oven');
 INSERT INTO RequiredItems (ItemName, ItemDescription) VALUES ('White Wine', 'Wine made from grapes without using their skin');
@@ -320,9 +334,12 @@ INSERT INTO ClassifiesBy (RecipeID, DescriptorName) VALUES (102, 'spicy');
 INSERT INTO ClassifiesBy (RecipeID, DescriptorName) VALUES (104, 'spicy');
 INSERT INTO ClassifiesBy (RecipeID, DescriptorName) VALUES (106, 'quick');
 INSERT INTO ClassifiesBy (RecipeID, DescriptorName) VALUES (106, 'breakfast');
+
 -- Inserting values into Uses
 INSERT INTO Uses (RecipeID, ItemName, Quantity, Unit) VALUES (101, 'Whisk', 1, NULL);
 INSERT INTO Uses (RecipeID, ItemName, Quantity, Unit) VALUES (103, 'Eggs', 0.5, 'kg');
+INSERT INTO Uses (RecipeID, ItemName, Quantity, Unit) VALUES (106, 'Avocado', 1, 'unit');
+INSERT INTO Uses (RecipeID, ItemName, Quantity, Unit) VALUES (106, 'Bread', 1, 'slices');
 INSERT INTO Uses (RecipeID, ItemName, Quantity, Unit) VALUES (104, 'Flour', 400, 'grams');
 INSERT INTO Uses (RecipeID, ItemName, Quantity, Unit) VALUES (106, 'Eggs', 1, 'unit');
 INSERT INTO Uses (RecipeID, ItemName, Quantity, Unit) VALUES (101, 'Sugar', 0.2, 'kg');

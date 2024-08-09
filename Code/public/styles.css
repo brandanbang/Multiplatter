@@ -612,6 +612,30 @@ input::placeholder, textarea::placeholder {
 }
 
 .topRecipe {
+    /*margin-top: 20px;*/
+    margin-left: 210px;
+    /*width: 150px;*/
+    /*height: 300px;*/
+    text-align: center;
+    border: solid;
+    border-color: #3B4D2B;
+    border-width: 10px;
+    background-color: #D4EAC0;
+    padding: 5px;
+    overflow: scroll;
+}
+
+#quickRecipe {
+    font-family: Impact;
+    font-size: 50px;
+}
+
+#quickRecipeVal {
+    font-family: Impact;
+    font-size: 25px;
+}
+
+.quickRecipe {
     margin-left: 210px;
     /*width: 100px;*/
     /*height: 200px;*/
@@ -622,6 +646,7 @@ input::placeholder, textarea::placeholder {
     background-color: #D4EAC0 ;
     overflow: scroll;
 }
+
 .comments {
     font-family: "Arial Black";
     margin-left: 230px;

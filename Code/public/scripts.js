@@ -209,11 +209,29 @@ async function displayTopRecipe() {
     }
 }
 
+async function displayQuickRecipe() {
+    console.log('in  display recipe');
+    const response = await fetch('/quickRecipe', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    console.log(responseData);
+
+    const quickRecipeVal = document.getElementById('quickRecipeVal');
+    if (responseData.data.length > 0) {
+        quickRecipeVal.textContent = responseData.data.join(', ');
+    } else {
+        quickRecipeVal.textContent = 'No quick recipe yet!';
+    }
+}
+
 
 window.onload = function() {
     checkDbConnection();
     displayTopUser();
     displayTopRecipe();
+    displayQuickRecipe()
     document.getElementById("loginform").addEventListener("submit", login);
     document.getElementById("signUpform").addEventListener("submit", signUp);
     //document.getElementById("topRecipe").addEventListener("click", displayTopRecipe);

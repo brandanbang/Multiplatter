@@ -681,6 +681,40 @@ async function updateUserDetails(username,password,email,name,confirm) {
     });
 }
 
+async function quickrecipe() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `SELECT r.Title FROM RecipeCreatesSortedBy r
+            JOIN InstructionStep i ON r.RecipeID = i.RecipeID
+            JOIN InstructionTime it ON it.Instruction = i.Instruction
+            GROUP BY r.Title
+            HAVING AVG(it.Duration)<= ALL (
+            SELECT AVG(it2.Duration)
+            FROM InstructionStep i2
+            JOIN InstructionTime it2 ON it2.Instruction = i2.Instruction
+            GROUP BY i2.RecipeID)
+`);
+
+        if (result.rows.length > 0) {
+
+            console.log(result.rows);
+
+            let recipe = [];
+            for (let i = 0; i < result.rows.length; i++) {
+                recipe.push(result.rows[i]);
+            }
+            console.log(recipe);
+            return recipe;
+        } else {
+            return []
+        }
+    }).catch(() => {
+        console.error('Error fetching quick recipe:');
+        return [];
+    });
+}
+
+
 module.exports = {
     testOracleConnection,
     initiateAlltables,
@@ -707,5 +741,6 @@ module.exports = {
     getUsedRecipeID,
     getStoresSellingIngredients,
     toprecipe,
-    updateUserDetails
+    updateUserDetails,
+    quickrecipe
 };
