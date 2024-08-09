@@ -17,7 +17,7 @@ async function loadRecipeInfo(urlId) {
             const recipe = await response.json();
             console.log('Fetched data:', recipe);
 
-            const [rTitle, rImg, rDescription, rID, rCreator, rCategory, avgRating] = recipe;
+            const [rTitle, rDescription, rID, rCreator, rCategory, avgRating] = recipe;
 
             title.textContent = rTitle || 'not found';
             // img. place holder for img
