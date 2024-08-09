@@ -319,6 +319,7 @@ INSERT INTO ClassifiesBy (RecipeID, DescriptorName) VALUES (103, 'lunch');
 INSERT INTO ClassifiesBy (RecipeID, DescriptorName) VALUES (102, 'spicy');
 INSERT INTO ClassifiesBy (RecipeID, DescriptorName) VALUES (104, 'spicy');
 INSERT INTO ClassifiesBy (RecipeID, DescriptorName) VALUES (106, 'quick');
+INSERT INTO ClassifiesBy (RecipeID, DescriptorName) VALUES (106, 'breakfast');
 -- Inserting values into Uses
 INSERT INTO Uses (RecipeID, ItemName, Quantity, Unit) VALUES (101, 'Whisk', 1, NULL);
 INSERT INTO Uses (RecipeID, ItemName, Quantity, Unit) VALUES (103, 'Eggs', 0.5, 'kg');
