@@ -109,9 +109,12 @@ async function fetchRecipesFromDb() {
 async function fetchRecipesFromDbById(id) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(`
-            SELECT *
-            FROM RECIPECREATESSORTEDBY
-            WHERE RecipeID = :id`,
+            SELECT r.Title, r.RecipeDescription, r.RecipeID, r.Username, r.DescriptorName, AVG(rt.Rating) as AvgRating
+            FROM RECIPECREATESSORTEDBY r
+            LEFT JOIN FEEDBACKRESPONDSWITHENGAGESWITH f ON r.RecipeID = f.RecipeID
+            LEFT JOIN RATING rt ON f.FeedbackID = rt.FeedbackID
+            WHERE r.RecipeID = :id
+            GROUP BY r.Title, r.RecipeDescription, r.RecipeID, r.Username, r.DescriptorName`,
             [id]
         );
         return result.rows[0];
