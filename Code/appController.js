@@ -337,8 +337,8 @@ router.get('/topRecipe', async (req, res) => {
 });
 
 router.post('/updateUserDetails', async (req, res) => {
-    const { Username,Password,OldPhoneNo,NewPhoneNo,Email,Name,Confirm } = req.body;
-    const updateResult = await appService.updateUserDetails(Username,Password,OldPhoneNo,NewPhoneNo,Email,Name,Confirm);
+    const { Username,Password,Email,Name,Confirm } = req.body;
+    const updateResult = await appService.updateUserDetails(Username,Password,Email,Name,Confirm);
     if (updateResult) {
         res.json({ success: true });
     } else {

@@ -2,12 +2,10 @@ async function updateDetails(event) {
     event.preventDefault();
     const username = localStorage.getItem('username');
     const password = document.getElementById('updateP').value;
-    const oldPhoneNo = document.getElementById('updatePnO').value;
-    const newPhoneNo = document.getElementById('updatePnN').value;
     const email = document.getElementById('updateE').value;
     const name = document.getElementById('updateN').value;
     const confirm = document.getElementById('updateC').value;
-console.log(username,password,oldPhoneNo,newPhoneNo,email,name);
+console.log(username,password,email,name);
     const response = await fetch('/updateUserDetails', {
         method: 'POST',
         headers: {
@@ -16,8 +14,6 @@ console.log(username,password,oldPhoneNo,newPhoneNo,email,name);
         body: JSON.stringify({
             Username: username,
             Password: password,
-            OldPhoneNo: oldPhoneNo,
-            NewPhoneNo: newPhoneNo,
             Email: email,
             Name: name,
             Confirm: confirm
@@ -31,7 +27,7 @@ console.log(username,password,oldPhoneNo,newPhoneNo,email,name);
     if (responseData.success) {
         messageElement.textContent = "Updated your details!";
     } else {
-        messageElement.textContent = "error updating details! Either the password is wrong or email is already in use!";
+        messageElement.textContent = "error updating details!";
     }
 }
 

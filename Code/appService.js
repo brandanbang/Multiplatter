@@ -635,11 +635,10 @@ async function toprecipe() {
     });
 }
 
-async function updateUserDetails(username,password,oldPhoneNo,newPhoneNo,email,name,confirm) {
+async function updateUserDetails(username,password,email,name,confirm) {
     return await withOracleDB(async (connection) => {
         let sql =[];
         let bindVar = [];
-        // let resultPn;
         if (username.length !== 0) {
             const confirmResult = await connection.execute(`
             SELECT u.Password
@@ -651,12 +650,6 @@ async function updateUserDetails(username,password,oldPhoneNo,newPhoneNo,email,n
                     sql.push(`Password = :password`);
                     bindVar.push(password);
                 }
-                // if (oldPhoneNo && newPhoneNo) {
-                //     await connection.execute(`UPDATE UserLocation SET PhoneNo = :newPhoneNo WHERE PhoneNo = :oldPhoneNo`
-                //         , [newPhoneNo,oldPhoneNo], { autoCommit: true });
-                //     resultPn = await connection.execute(`UPDATE UserLocation SET PhoneNo = :newPhoneNo WHERE PhoneNo = :oldPhoneNo`
-                //         , [newPhoneNo,oldPhoneNo], { autoCommit: true });
-                // }
                 if (email) {
                     sql.push(`Email = :email`);
                     bindVar.push(email);
