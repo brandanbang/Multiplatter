@@ -108,10 +108,16 @@ async function filterRecipes() {
                 ratingDiv.classList.add('rating');
                 ratingDiv.textContent = `Average Rating: ${avgRating !== null && avgRating !== undefined ? avgRating.toFixed(2) : 'N/A'}`;
 
+                const link = document.createElement('a');
+                link.href = `/recipe/${id}`;
+                link.classList.add('recipe-link');
+
+
                 const heartButton = document.createElement('button');
                 heartButton.classList.add('heart-button');
                 heartButton.innerHTML = '❤';
                 heartButton.addEventListener('click', async () => {
+
 
                     if (!username) {
                         alert('Please log in to save recipes');
@@ -122,11 +128,12 @@ async function filterRecipes() {
                     }
 
                 });
-
-                recipeCard.appendChild(img);
-                recipeCard.appendChild(titleDiv);
+                link.appendChild(titleDiv);
+                recipeCard.appendChild(link);
+                //recipeCard.appendChild(titleDiv);
                 recipeCard.appendChild(ratingDiv);
                 recipeCard.appendChild(heartButton);
+
                 recipeContainer.appendChild(recipeCard);
             });
 

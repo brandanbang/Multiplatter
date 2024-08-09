@@ -27,25 +27,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             recipeCard.classList.add('recipe-card');
 
             const img = document.createElement('img');
-            //img.src = photo || 'default-image.jpg';
             img.alt = title || 'No title';
 
             const titleDiv = document.createElement('div');
             titleDiv.classList.add('title');
             titleDiv.textContent = title || 'No title';
 
-
             const ratingDiv = document.createElement('div');
             ratingDiv.classList.add('rating');
             ratingDiv.textContent = `Average Rating: ${avgRating !== null && avgRating !== undefined ? avgRating.toFixed(2) : 'N/A'}`;
-            //ratingDiv.textContent = `Average Rating: ${avgRating !== null && avgRating !== undefined ? avgRating.toFixed(2) : 'N/A'}`;
 
-            // const removeButton = document.createElement('button');
-            // removeButton.classList.add('remove-button');
-            // removeButton.innerHTML = 'x';
+            const link = document.createElement('a');
+            link.href = `/recipe/${id}`;
+            link.classList.add('recipe-link');
+
+
+            // const heartButton = document.createElement('button');
+            // heartButton.classList.add('heart-button');
+            // heartButton.innerHTML = '❤';
             // heartButton.addEventListener('click', async () => {
             //
-            //     //const isLoggedIn = await checkLoginStatus();
+            //
             //     if (!username) {
             //         alert('Please log in to save recipes');
             //         window.location.href = 'signIn.html';
@@ -55,11 +57,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             //     }
             //
             // });
-
-            recipeCard.appendChild(img);
-            recipeCard.appendChild(titleDiv);
+            link.appendChild(titleDiv);
+            recipeCard.appendChild(link);
+            //recipeCard.appendChild(titleDiv);
             recipeCard.appendChild(ratingDiv);
-            // recipeCard.appendChild(removeButton);
+            //recipeCard.appendChild(heartButton);
 
             recipesContainer.appendChild(recipeCard);
         });
